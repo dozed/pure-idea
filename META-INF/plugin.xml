@@ -1,0 +1,42 @@
+<idea-plugin version="2">
+    <id>in.twbs.pure</id>
+    <name>Purescript Plugin</name>
+    <version>1.0</version>
+    <vendor email="ikarienator@gmail.com" url="http://twbs.in">Bei Zhang</vendor>
+
+    <description><![CDATA[
+      Enter short description for your plugin here.<br>
+      <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+    </change-notes>
+
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTypeFactory
+                implementation="in.twbs.pure.lang.file.PureFileTypeLoader"/>
+        <lang.parserDefinition language="Purescript"
+                               implementationClass="in.twbs.pure.lang.PureParserDefinition"/>
+        <lang.syntaxHighlighterFactory key="Purescript"
+                                       implementationClass="in.twbs.pure.lang.highlight.PureSyntaxHighlighterFactory"/>
+    </extensions>
+
+</idea-plugin>

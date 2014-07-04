@@ -1,4 +1,4 @@
 pure-idea
 =========
 
-IntelliJ plugin for PureScript
+IntelliJ plugin for PureScript.
