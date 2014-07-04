@@ -31,12 +31,12 @@ identStart = [:lowercase:]|"_"
 identLetter = [:letter:]|[:digit:]|[_\']
 properStart = [:uppercase:]
 properLetter = [:letter:]|[:digit:]
+properName = {properStart}{properLetter}*
 
 decimal = [0-9]+
 hexadecimal = [xX][0-9a-zA-Z]+
 octal = [oO][0-7]+
-stringChar = [^\"\\\0-\u001B]|{stringEscape}
-stringEscape = "\\" ({escapeGap} | {escapeEmpty} | {escapeCode} )
+stringChar = [^\"\\\0-\u001B]
 escapeEmpty = "&"
 escapeGap = {whitespace}*"\\"
 escapeCode = {charEsc} | {charNum} | {charAscii} | {charControl}
@@ -45,7 +45,7 @@ charNum = {decimal} | "x" [0-9a-zA-Z]+ | "o" [0-7]+
 charAscii = "BS"|"HT"|"LF"|"VT"|"FF"|"CR"|"SO"|"SI"|"EM"|"FS"|"GS"|"RS"|"US"|"SP"|"NUL"|"SOH"|"STX"|"ETX"|"EOT"|"ENQ"|"ACK"|"BEL"|"DLE"|"DC1"|"DC2"|"DC3"|"DC4"|"NAK"|"SYN"|"ETB"|"CAN"|"SUB"|"ESC"|"DEL"
 charControl = "^" [:uppercase:]
 
-%x COMMENT
+%x COMMENT, STRINGS
 
 %{
    int comment_nesting = 0;
@@ -57,18 +57,27 @@ charControl = "^" [:uppercase:]
 
 <COMMENT> {
 
-"{-"                           { comment_nesting++; }
-"-}"                           { comment_nesting--; if (comment_nesting == 0) { yybegin(YYINITIAL); return MLCOMMENT; } }
-<<EOF>>                        { return MLCOMMENT; }
-[^]                            { }
+"{-"                           { comment_nesting++; return MLCOMMENT; }
+"-}"                           { comment_nesting--; if (comment_nesting == 0) yybegin(YYINITIAL); return MLCOMMENT; }
+[^]                            { return MLCOMMENT; }
 
+}
+
+<STRINGS> {
+"\""                           { yybegin(YYINITIAL); return STRING; }
+{stringChar}                   { return STRING; }
+"\\" {escapeCode}              { return STRING_ESCAPED; }
+"\\" {escapeEmpty}             { return STRING_GAP; }
+"\\" {escapeGap}               { return STRING_GAP; }
+"\\"                           { return STRING_ERROR; }
+[^]                            { return ERROR; }
 }
 
 <YYINITIAL> {
 
 {whitespace}                   { return WS; }
 
-"{-"                           { yybegin(COMMENT); comment_nesting = 1; }
+"{-"                           { yybegin(COMMENT); comment_nesting = 1; return MLCOMMENT; }
 "--" [^\n]*                    { return SLCOMMENT; }
 
 "data"                         { return DATA; }
@@ -99,6 +108,11 @@ charControl = "^" [:uppercase:]
 "."                            { return DOT; }
 "\\"                           { return DBACKSLASH; }
 
+";"                            { return SEMI; }
+":"                            { return COLON; }
+"`"                            { return TICK; }
+"|"                            { return PIPE; }
+
 ","                            { return COMMA; }
 "("                            { return LPAREN; }
 ")"                            { return RPAREN; }
@@ -109,11 +123,12 @@ charControl = "^" [:uppercase:]
 
 "0"({hexadecimal}|{octal}|{decimal})|{decimal} { return NATURAL; }
 
-"\"" {stringChar}* "\""        { return STRING; }
-"\"" {stringChar}*             { return ERROR; }
+"\""                           { yybegin(STRINGS); return STRING; }
 
 {identStart}{identLetter}*     { return IDENT; }
-{properStart}{properLetter}*   { return PROPER_IDENT; }
+{properName}                   { return PROPER_NAME; }
+{properName}"."{properName}("."{properName})*
+                               { return MODULE_NAME; }
 {opChars}+                     { return OPERATOR; }
 
 .                              { return ERROR; }

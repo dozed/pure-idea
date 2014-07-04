@@ -5,8 +5,8 @@ import com.intellij.psi.tree.TokenSet;
 public interface PureTokens {
     PureElementType ERROR = new PureElementType("error");
     PureElementType WS = new PureElementType("whitespace");
-    PureElementType MLCOMMENT = new PureElementType("line comment");
-    PureElementType SLCOMMENT = new PureElementType("block comment");
+    PureElementType MLCOMMENT = new PureElementType("block comment");
+    PureElementType SLCOMMENT = new PureElementType("line comment");
 
     PureElementType DATA = new PureElementType("data");
     PureElementType TYPE = new PureElementType("type");
@@ -34,6 +34,10 @@ public interface PureTokens {
     PureElementType EQ = new PureElementType("=");
     PureElementType DOT = new PureElementType(".");
 
+    PureElementType SEMI = new PureElementType(";");
+    PureElementType COLON = new PureElementType(":");
+    PureElementType TICK = new PureElementType("`");
+    PureElementType PIPE = new PureElementType("|");
     PureElementType COMMA = new PureElementType(",");
     PureElementType LPAREN = new PureElementType("(");
     PureElementType RPAREN = new PureElementType(")");
@@ -44,8 +48,12 @@ public interface PureTokens {
 
     PureElementType DBACKSLASH = new PureElementType("\\\\");
     PureElementType OPERATOR = new PureElementType("operator");
-    PureElementType PROPER_IDENT = new PureElementType("proper name");
+    PureElementType PROPER_NAME = new PureElementType("proper name");
+    PureElementType MODULE_NAME = new PureElementType("proper name");
     PureElementType IDENT = new PureElementType("identifier");
+    PureElementType STRING_ESCAPED = new PureElementType("string escaping");
+    PureElementType STRING_GAP = new PureElementType("string escaping");
+    PureElementType STRING_ERROR = new PureElementType("string escaping error");
     PureElementType STRING = new PureElementType("string");
     PureElementType NATURAL = new PureElementType("natural");
 

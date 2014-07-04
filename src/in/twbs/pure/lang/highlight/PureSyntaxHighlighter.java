@@ -4,13 +4,15 @@ import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import in.twbs.pure.lang.lexer.PureLexer;
+import in.twbs.pure.lang.lexer.PureHightlightLexer;
 import in.twbs.pure.lang.psi.PureTokens;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +28,15 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements Pure
     public static final TextAttributesKey KEYWORD = createKey("pure.KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
 
     public static final TextAttributesKey STRING = createKey("pure.STRING", DefaultLanguageHighlighterColors.STRING);
+
+    private static final TextAttributes STRING_GAP_ATTR;
+
+    static {
+        STRING_GAP_ATTR = STRING.getDefaultAttributes().clone();
+        STRING_GAP_ATTR.setForegroundColor(Color.GRAY);
+    }
+
+    public static final TextAttributesKey STRING_GAP = createTextAttributesKey("pure.STRING_GAP", STRING_GAP_ATTR);
 
     public static final TextAttributesKey NUMBER = createKey("pure.NUMBER", DefaultLanguageHighlighterColors.NUMBER);
 
@@ -43,7 +54,7 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements Pure
 
     public static final TextAttributesKey GLOBAL_VARIABLE = createKey("pure.GLOBAL_VARIABLE", CodeInsightColors.STATIC_FIELD_ATTRIBUTES);
 
-    public static final TextAttributesKey METHOD_DECLARATION = createKey("pure.METHOD_DECLARATION", CodeInsightColors.METHOD_DECLARATION_ATTRIBUTES);
+    public static final TextAttributesKey METHOD_DECLARATION = createKey("pure.METHOD_DECLARATION", CodeInsightColors.METHOD_CALL_ATTRIBUTES);
 
     static {
         fillMap(ATTRIBUTES, TokenSet.create(SLCOMMENT), LINE_COMMENT);
@@ -56,13 +67,18 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements Pure
         fillMap(ATTRIBUTES, TokenSet.create(LCURLY, RCURLY), BRACKET);
         fillMap(ATTRIBUTES, kOperators, OPERATOR);
         fillMap(ATTRIBUTES, TokenSet.create(IDENT), IDENTIFIER);
+        fillMap(ATTRIBUTES, TokenSet.create(PROPER_NAME), METHOD_DECLARATION);
+        fillMap(ATTRIBUTES, TokenSet.create(MODULE_NAME), TYPE_NAME);
+        fillMap(ATTRIBUTES, TokenSet.create(STRING_ESCAPED), KEYWORD);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.STRING_GAP), STRING_GAP);
+        fillMap(ATTRIBUTES, TokenSet.create(STRING_ERROR), CodeInsightColors.ERRORS_ATTRIBUTES);
         fillMap(ATTRIBUTES, TokenSet.create(ERROR), CodeInsightColors.ERRORS_ATTRIBUTES);
     }
 
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
-        return new PureLexer();
+        return new PureHightlightLexer();
     }
 
     @NotNull
