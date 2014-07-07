@@ -11,19 +11,12 @@ import static in.twbs.pure.lang.psi.PureTokens.*;
 %implements FlexLexer
 %function advance
 %type IElementType
-%line
-%column
 
 %eof{
 
 return;
 
 %eof}
-
-%{
-
-%}
-
 
 whitespace = [ \t\f\r\n]
 opChars = [\:\!#\$%&*+./<=>?@\\\^|\-~]
@@ -36,7 +29,7 @@ properName = {properStart}{properLetter}*
 decimal = [0-9]+
 hexadecimal = [xX][0-9a-zA-Z]+
 octal = [oO][0-7]+
-stringChar = [^\"\\\0-\u001B]
+stringChar = [^\"\\\0-\u001A]
 escapeEmpty = "&"
 escapeGap = {whitespace}*"\\"
 escapeCode = {charEsc} | {charNum} | {charAscii} | {charControl}
@@ -75,6 +68,8 @@ charControl = "^" [:uppercase:]
 
 <YYINITIAL> {
 
+[\n]                           { return NL; }
+[\t]                           { return TAB; }
 {whitespace}                   { return WS; }
 
 "{-"                           { yybegin(COMMENT); comment_nesting = 1; return MLCOMMENT; }
