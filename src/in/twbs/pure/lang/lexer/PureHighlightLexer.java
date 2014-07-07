@@ -8,8 +8,8 @@ import in.twbs.pure.lang.psi.PureTokens;
 
 import java.io.Reader;
 
-public final class PureHightlightLexer extends LookAheadLexer {
-    public PureHightlightLexer() {
+public final class PureHighlightLexer extends LookAheadLexer {
+    public PureHighlightLexer() {
         super(new MergingLexerAdapter(new FlexAdapter(new _PureLexer((Reader) null)), TokenSet.create(PureTokens.MLCOMMENT, PureTokens.WS, PureTokens.STRING)), 10);
     }
 }

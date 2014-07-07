@@ -8,7 +8,7 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import in.twbs.pure.lang.lexer.PureHightlightLexer;
+import in.twbs.pure.lang.lexer.PureHighlightLexer;
 import in.twbs.pure.lang.psi.PureTokens;
 import org.jetbrains.annotations.NotNull;
 
@@ -78,7 +78,7 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements Pure
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
-        return new PureHightlightLexer();
+        return new PureHighlightLexer();
     }
 
     @NotNull
