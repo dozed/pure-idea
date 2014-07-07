@@ -107,6 +107,7 @@ charControl = "^" [:uppercase:]
 "\\"                           { return DBACKSLASH; }
 
 ";"                            { return SEMI; }
+"::"                           { return DCOLON; }
 "`"                            { return TICK; }
 "|"                            { return PIPE; }
 

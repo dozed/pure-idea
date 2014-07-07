@@ -40,6 +40,7 @@ public interface PureTokens {
     PureElementType DDOT = new PureElementType("..");
 
     PureElementType SEMI = new PureElementType(";");
+    PureElementType DCOLON = new PureElementType("::");
     PureElementType TICK = new PureElementType("`");
     PureElementType PIPE = new PureElementType("|");
     PureElementType COMMA = new PureElementType(",");
