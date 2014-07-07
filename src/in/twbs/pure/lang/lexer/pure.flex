@@ -96,15 +96,17 @@ charControl = "^" [:uppercase:]
 "false"                        { return FALSE; }
 "in"                           { return IN; }
 "where"                        { return WHERE; }
+"forall"                       { return FORALL; }
 
 "=>"                           { return DARROW; }
+"<="                           { return DERIVE; }
 "->"                           { return ARROW; }
 "="                            { return EQ; }
 "."                            { return DOT; }
+".."                           { return DDOT; }
 "\\"                           { return DBACKSLASH; }
 
 ";"                            { return SEMI; }
-":"                            { return COLON; }
 "`"                            { return TICK; }
 "|"                            { return PIPE; }
 

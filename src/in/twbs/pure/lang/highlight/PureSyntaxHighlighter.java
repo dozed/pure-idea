@@ -44,15 +44,9 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements Pure
 
     public static final TextAttributesKey OPERATOR = createKey("pure.OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
 
-    public static final TextAttributesKey IDENTIFIER = createKey("pure.IDENTIFIER", CodeInsightColors.LOCAL_VARIABLE_ATTRIBUTES);
-
     public static final TextAttributesKey TYPE_NAME = createKey("pure.TYPE_NAME", CodeInsightColors.ANNOTATION_NAME_ATTRIBUTES);
 
     public static final TextAttributesKey VARIABLE = createKey("pure.VARIABLE", CodeInsightColors.INSTANCE_FIELD_ATTRIBUTES);
-
-    public static final TextAttributesKey CONST = createKey("pure.CONST", CodeInsightColors.STATIC_FINAL_FIELD_ATTRIBUTES);
-
-    public static final TextAttributesKey GLOBAL_VARIABLE = createKey("pure.GLOBAL_VARIABLE", CodeInsightColors.STATIC_FIELD_ATTRIBUTES);
 
     public static final TextAttributesKey METHOD_DECLARATION = createKey("pure.METHOD_DECLARATION", CodeInsightColors.METHOD_CALL_ATTRIBUTES);
 
@@ -66,7 +60,7 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements Pure
         fillMap(ATTRIBUTES, TokenSet.create(LBRACK, RBRACK), BRACKET);
         fillMap(ATTRIBUTES, TokenSet.create(LCURLY, RCURLY), BRACKET);
         fillMap(ATTRIBUTES, kOperators, OPERATOR);
-        fillMap(ATTRIBUTES, TokenSet.create(IDENT), IDENTIFIER);
+        fillMap(ATTRIBUTES, TokenSet.create(IDENT, PureTokens.OPERATOR), VARIABLE);
         fillMap(ATTRIBUTES, TokenSet.create(PROPER_NAME), METHOD_DECLARATION);
         fillMap(ATTRIBUTES, TokenSet.create(MODULE_NAME), TYPE_NAME);
         fillMap(ATTRIBUTES, TokenSet.create(STRING_ESCAPED), KEYWORD);

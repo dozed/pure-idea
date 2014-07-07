@@ -31,13 +31,15 @@ public interface PureTokens {
     PureElementType FALSE = new PureElementType("false");
     PureElementType IN = new PureElementType("in");
     PureElementType WHERE = new PureElementType("where");
+    PureElementType FORALL = new PureElementType("forall");
     PureElementType DARROW = new PureElementType("=>");
+    PureElementType DERIVE = new PureElementType("<=");
     PureElementType ARROW = new PureElementType("->");
     PureElementType EQ = new PureElementType("=");
     PureElementType DOT = new PureElementType(".");
+    PureElementType DDOT = new PureElementType("..");
 
     PureElementType SEMI = new PureElementType(";");
-    PureElementType COLON = new PureElementType(":");
     PureElementType TICK = new PureElementType("`");
     PureElementType PIPE = new PureElementType("|");
     PureElementType COMMA = new PureElementType(",");
@@ -61,8 +63,8 @@ public interface PureTokens {
 
 
     TokenSet kWhiteSpaces = TokenSet.create(WS, NL, TAB, MLCOMMENT, SLCOMMENT);
-    TokenSet kKeywords = TokenSet.create(DATA, TYPE, FOREIGN, IMPORT, INFIXL, INFIXR, INFIX, CLASS, INSTANCE, MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE);
+    TokenSet kKeywords = TokenSet.create(DATA, TYPE, FOREIGN, IMPORT, INFIXL, INFIXR, INFIX, CLASS, INSTANCE, MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE, FORALL);
     TokenSet kComments = TokenSet.create(MLCOMMENT, SLCOMMENT);
     TokenSet kStrings = TokenSet.create(STRING);
-    TokenSet kOperators = TokenSet.create(DARROW, ARROW, EQ, DOT, LPAREN, RPAREN, LBRACK, RBRACK, LCURLY, RCURLY, OPERATOR);
+    TokenSet kOperators = TokenSet.create(DARROW, ARROW, EQ, DOT, LPAREN, RPAREN, LBRACK, RBRACK, LCURLY, RCURLY);
 }
