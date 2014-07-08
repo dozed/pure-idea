@@ -9,6 +9,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import in.twbs.pure.lang.lexer.PureHighlightLexer;
+import in.twbs.pure.lang.psi.PureElements;
 import in.twbs.pure.lang.psi.PureTokens;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
-public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements PureTokens {
+public class PureSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
     public static final TextAttributesKey LINE_COMMENT = createKey("pure.LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
@@ -48,25 +49,27 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements Pure
 
     public static final TextAttributesKey VARIABLE = createKey("pure.VARIABLE", CodeInsightColors.INSTANCE_FIELD_ATTRIBUTES);
 
+    public static final TextAttributesKey MODULE_NAME = createKey("pure.MODULE_NAME", CodeInsightColors.ANNOTATION_NAME_ATTRIBUTES);
+
     public static final TextAttributesKey METHOD_DECLARATION = createKey("pure.METHOD_DECLARATION", CodeInsightColors.METHOD_CALL_ATTRIBUTES);
 
     static {
-        fillMap(ATTRIBUTES, TokenSet.create(SLCOMMENT), LINE_COMMENT);
-        fillMap(ATTRIBUTES, TokenSet.create(MLCOMMENT), BLOCK_COMMENT);
-        fillMap(ATTRIBUTES, kKeywords, KEYWORD);
-        fillMap(ATTRIBUTES, TokenSet.create(NATURAL), NUMBER);
-        fillMap(ATTRIBUTES, kStrings, STRING);
-        fillMap(ATTRIBUTES, TokenSet.create(LPAREN, RPAREN), BRACKET);
-        fillMap(ATTRIBUTES, TokenSet.create(LBRACK, RBRACK), BRACKET);
-        fillMap(ATTRIBUTES, TokenSet.create(LCURLY, RCURLY), BRACKET);
-        fillMap(ATTRIBUTES, kOperators, OPERATOR);
-        fillMap(ATTRIBUTES, TokenSet.create(IDENT, PureTokens.OPERATOR), VARIABLE);
-        fillMap(ATTRIBUTES, TokenSet.create(PROPER_NAME), METHOD_DECLARATION);
-        fillMap(ATTRIBUTES, TokenSet.create(MODULE_NAME), TYPE_NAME);
-        fillMap(ATTRIBUTES, TokenSet.create(STRING_ESCAPED), KEYWORD);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.SLCOMMENT), LINE_COMMENT);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.MLCOMMENT), BLOCK_COMMENT);
+        fillMap(ATTRIBUTES, PureTokens.kKeywords, KEYWORD);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.NATURAL), NUMBER);
+        fillMap(ATTRIBUTES, PureTokens.kStrings, STRING);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.LPAREN, PureTokens.RPAREN), BRACKET);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.LBRACK, PureTokens.RBRACK), BRACKET);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.LCURLY, PureTokens.RCURLY), BRACKET);
+        fillMap(ATTRIBUTES, PureTokens.kOperators, OPERATOR);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.IDENT, PureTokens.OPERATOR), VARIABLE);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.PROPER_NAME), METHOD_DECLARATION);
+        fillMap(ATTRIBUTES, TokenSet.create(PureElements.ModuleName), TYPE_NAME);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.STRING_ESCAPED), KEYWORD);
         fillMap(ATTRIBUTES, TokenSet.create(PureTokens.STRING_GAP), STRING_GAP);
-        fillMap(ATTRIBUTES, TokenSet.create(STRING_ERROR), CodeInsightColors.ERRORS_ATTRIBUTES);
-        fillMap(ATTRIBUTES, TokenSet.create(ERROR), CodeInsightColors.ERRORS_ATTRIBUTES);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.STRING_ERROR), CodeInsightColors.ERRORS_ATTRIBUTES);
+        fillMap(ATTRIBUTES, TokenSet.create(PureTokens.ERROR), CodeInsightColors.ERRORS_ATTRIBUTES);
     }
 
     @NotNull

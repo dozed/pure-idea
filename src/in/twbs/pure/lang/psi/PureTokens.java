@@ -51,19 +51,19 @@ public interface PureTokens {
     PureElementType LCURLY = new PureElementType("{");
     PureElementType RCURLY = new PureElementType("}");
 
-    PureElementType DBACKSLASH = new PureElementType("\\\\");
+    PureElementType BACKSLASH = new PureElementType("\\");
     PureElementType OPERATOR = new PureElementType("operator");
     PureElementType PROPER_NAME = new PureElementType("proper name");
-    PureElementType MODULE_NAME = new PureElementType("proper name");
     PureElementType IDENT = new PureElementType("identifier");
     PureElementType STRING_ESCAPED = new PureElementType("string escaping");
     PureElementType STRING_GAP = new PureElementType("string escaping");
     PureElementType STRING_ERROR = new PureElementType("string escaping error");
     PureElementType STRING = new PureElementType("string");
     PureElementType NATURAL = new PureElementType("natural");
+    PureElementType FLOAT = new PureElementType("float");
 
 
-    TokenSet kWhiteSpaces = TokenSet.create(WS, NL, TAB, MLCOMMENT, SLCOMMENT);
+    TokenSet kWhiteSpaces = TokenSet.create(WS, NL, TAB);
     TokenSet kKeywords = TokenSet.create(DATA, TYPE, FOREIGN, IMPORT, INFIXL, INFIXR, INFIX, CLASS, INSTANCE, MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE, FORALL);
     TokenSet kComments = TokenSet.create(MLCOMMENT, SLCOMMENT);
     TokenSet kStrings = TokenSet.create(STRING);

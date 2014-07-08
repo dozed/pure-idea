@@ -11,7 +11,7 @@ import java.io.Reader;
 
 public final class PureLexer extends LookAheadLexer {
     public PureLexer() {
-        super(new MergedPureLexer(), 10);
+        super(new MergedPureLexer(), 64);
     }
 
     private static final class MergedPureLexer extends MergingLexerAdapterBase {
@@ -22,16 +22,21 @@ public final class PureLexer extends LookAheadLexer {
         private static final MergingLexerAdapterBase.MergeFunction mergeFunction = new MergeFunction() {
             @Override
             public IElementType merge(IElementType type, Lexer originalLexer) {
-                if (type != PureTokens.STRING) {
-                    return type;
+                if (type == PureTokens.STRING) {
+                    while (true) {
+                        final IElementType tokenType = originalLexer.getTokenType();
+                        if (tokenType != PureTokens.STRING && tokenType != PureTokens.STRING_ESCAPED && tokenType != PureTokens.STRING_GAP)
+                            break;
+                        originalLexer.advance();
+                    }
+                } else if (type == PureTokens.MLCOMMENT) {
+                    while (true) {
+                        final IElementType tokenType = originalLexer.getTokenType();
+                        if (tokenType != PureTokens.MLCOMMENT)
+                            break;
+                        originalLexer.advance();
+                    }
                 }
-
-                while (true) {
-                    final IElementType tokenType = originalLexer.getTokenType();
-                    if (tokenType != PureTokens.STRING && tokenType != PureTokens.STRING_ESCAPED) break;
-                    originalLexer.advance();
-                }
-
                 return type;
             }
         };

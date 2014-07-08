@@ -38,13 +38,13 @@ public class PureParserDefinition implements ParserDefinition, PureTokens {
     @NotNull
     @Override
     public TokenSet getWhitespaceTokens() {
-        return kWhiteSpaces;
+        return TokenSet.EMPTY;
     }
 
     @NotNull
     @Override
     public TokenSet getCommentTokens() {
-        return kComments;
+        return TokenSet.EMPTY;
     }
 
     @NotNull
