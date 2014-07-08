@@ -104,7 +104,7 @@ charControl = "^" [:uppercase:]
 "="                            { return EQ; }
 "."                            { return DOT; }
 ".."                           { return DDOT; }
-"\\"                           { return DBACKSLASH; }
+"\\"                           { return BACKSLASH; }
 
 ";"                            { return SEMI; }
 "::"                           { return DCOLON; }
@@ -125,8 +125,6 @@ charControl = "^" [:uppercase:]
 
 {identStart}{identLetter}*     { return IDENT; }
 {properName}                   { return PROPER_NAME; }
-{properName}"."{properName}("."{properName})*
-                               { return MODULE_NAME; }
 {opChars}+                     { return OPERATOR; }
 
 .                              { return ERROR; }

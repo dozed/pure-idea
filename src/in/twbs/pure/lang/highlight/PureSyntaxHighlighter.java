@@ -9,6 +9,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import in.twbs.pure.lang.lexer.PureHighlightLexer;
+import in.twbs.pure.lang.psi.PureElements;
 import in.twbs.pure.lang.psi.PureTokens;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
-public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements PureTokens {
+public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements PureTokens, PureElements {
     private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<IElementType, TextAttributesKey>();
 
     public static final TextAttributesKey LINE_COMMENT = createKey("pure.LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
@@ -62,7 +63,7 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase implements Pure
         fillMap(ATTRIBUTES, kOperators, OPERATOR);
         fillMap(ATTRIBUTES, TokenSet.create(IDENT, PureTokens.OPERATOR), VARIABLE);
         fillMap(ATTRIBUTES, TokenSet.create(PROPER_NAME), METHOD_DECLARATION);
-        fillMap(ATTRIBUTES, TokenSet.create(MODULE_NAME), TYPE_NAME);
+        fillMap(ATTRIBUTES, TokenSet.create(ModuleName), TYPE_NAME);
         fillMap(ATTRIBUTES, TokenSet.create(STRING_ESCAPED), KEYWORD);
         fillMap(ATTRIBUTES, TokenSet.create(PureTokens.STRING_GAP), STRING_GAP);
         fillMap(ATTRIBUTES, TokenSet.create(STRING_ERROR), CodeInsightColors.ERRORS_ATTRIBUTES);
