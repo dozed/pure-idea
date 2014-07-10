@@ -113,14 +113,15 @@ public class Combinators {
             @NotNull
             @Override
             public ParserInfo parse(@NotNull ParserContext context) {
+                int position = context.getPosition();
                 ParserInfo info = head.parse(context);
-                if (info.success) {
+                if (context.getPosition() > position || info.success) {
                     return info;
                 }
                 for (Parsec p2 : tail) {
                     ParserInfo info2 = p2.parse(context);
                     info = ParserInfo.merge(info, info2, info2.success);
-                    if (info.success) {
+                    if (context.getPosition() > position || info.success) {
                         return info;
                     }
                 }
