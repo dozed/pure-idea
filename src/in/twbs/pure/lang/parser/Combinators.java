@@ -287,32 +287,17 @@ public class Combinators {
         };
     }
 
-    public static final Parsec EMPTY = new Parsec() {
-        @NotNull
-        @Override
-        public ParserInfo parse(@NotNull ParserContext context) {
-            return new ParserInfo(context.getPosition(), this, true);
-        }
-
-        @NotNull
-        @Override
-        public String getName() {
-            return "";
-        }
-    };
-
     @NotNull
     public static Parsec mark(@NotNull final Parsec p) {
         return new Parsec() {
             @NotNull
             @Override
             public ParserInfo parse(@NotNull ParserContext context) {
-                int indentationLevel = context.getIndentationLevel();
-                context.setIndentationLevel(context.getColumn());
+                context.pushIndentationLevel();
                 try {
                     return p.parse(context);
                 } finally {
-                    context.setIndentationLevel(indentationLevel);
+                    context.popIndentationLevel();
                 }
             }
 
@@ -326,7 +311,7 @@ public class Combinators {
 
     @NotNull
     static Parsec sepBy1(@NotNull final Parsec p, @NotNull final Parsec sep) {
-        return p.then(many(sep.then(p)));
+        return p.then(attempt(many(sep.then(p))));
     }
 
     @NotNull
@@ -350,7 +335,7 @@ public class Combinators {
     }
 
     @NotNull
-    static Parsec skipUntil(@NotNull final Parsec p, @NotNull final IElementType type, final boolean consume) {
+    static Parsec until(@NotNull final Parsec p, @NotNull final IElementType type, final boolean consume) {
         return new Parsec() {
             @NotNull
             @Override
@@ -364,8 +349,42 @@ public class Combinators {
                     if (context.match(type)) {
                         break;
                     }
+                    context.advance();
                 }
                 if (consume && !context.eof()) {
+                    context.advance();
+                }
+                start.error(info.toString());
+                return new ParserInfo(context.getPosition(), this, true);
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return p.getName();
+            }
+        };
+    }
+
+    @NotNull
+    static Parsec untilSame(@NotNull final Parsec p) {
+        return new Parsec() {
+            @NotNull
+            @Override
+            public ParserInfo parse(@NotNull ParserContext context) {
+                ParserInfo info = p.parse(context);
+                if (info.success) {
+                    return info;
+                }
+                context.whiteSpace();
+                if (context.getColumn() <= context.getLastIndentationLevel()) {
+                    return info;
+                }
+                PsiBuilder.Marker start = context.start();
+                while (!context.eof()) {
+                    if (context.getColumn() == context.getIndentationLevel()) {
+                        break;
+                    }
                     context.advance();
                 }
                 start.error(info.toString());

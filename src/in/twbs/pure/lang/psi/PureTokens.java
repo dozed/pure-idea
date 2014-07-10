@@ -5,8 +5,6 @@ import com.intellij.psi.tree.TokenSet;
 public interface PureTokens {
     PureElementType ERROR = new PureElementType("error");
     PureElementType WS = new PureElementType("whitespace");
-    PureElementType NL = new PureElementType("new line");
-    PureElementType TAB = new PureElementType("tab");
     PureElementType MLCOMMENT = new PureElementType("block comment");
     PureElementType SLCOMMENT = new PureElementType("line comment");
 
@@ -63,9 +61,7 @@ public interface PureTokens {
     PureElementType FLOAT = new PureElementType("float");
 
 
-    TokenSet kWhiteSpaces = TokenSet.create(WS, NL, TAB);
     TokenSet kKeywords = TokenSet.create(DATA, TYPE, FOREIGN, IMPORT, INFIXL, INFIXR, INFIX, CLASS, INSTANCE, MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE, FORALL);
-    TokenSet kComments = TokenSet.create(MLCOMMENT, SLCOMMENT);
     TokenSet kStrings = TokenSet.create(STRING);
     TokenSet kOperators = TokenSet.create(DARROW, ARROW, EQ, DOT, LPAREN, RPAREN, LBRACK, RBRACK, LCURLY, RCURLY);
 }

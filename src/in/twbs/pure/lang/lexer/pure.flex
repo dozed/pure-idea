@@ -68,9 +68,7 @@ charControl = "^" [:uppercase:]
 
 <YYINITIAL> {
 
-[\n]                           { return NL; }
-[\t]                           { return TAB; }
-{whitespace}                   { return WS; }
+{whitespace}+                  { return WS; }
 
 "{-"                           { yybegin(COMMENT); comment_nesting = 1; return MLCOMMENT; }
 "--" [^\n]*                    { return SLCOMMENT; }

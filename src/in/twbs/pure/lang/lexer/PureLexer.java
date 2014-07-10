@@ -29,13 +29,16 @@ public final class PureLexer extends LookAheadLexer {
                             break;
                         originalLexer.advance();
                     }
-                } else if (type == PureTokens.MLCOMMENT) {
+                } else if (type == PureTokens.MLCOMMENT || type == PureTokens.SLCOMMENT || type == PureTokens.WS) {
                     while (true) {
-                        final IElementType tokenType = originalLexer.getTokenType();
-                        if (tokenType != PureTokens.MLCOMMENT)
+                        type = originalLexer.getTokenType();
+                        if (type == PureTokens.MLCOMMENT || type == PureTokens.SLCOMMENT || type == PureTokens.WS) {
+                            originalLexer.advance();
+                        } else {
                             break;
-                        originalLexer.advance();
+                        }
                     }
+                    type = PureTokens.WS;
                 }
                 return type;
             }

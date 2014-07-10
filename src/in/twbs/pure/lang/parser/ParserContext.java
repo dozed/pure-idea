@@ -3,6 +3,7 @@ package in.twbs.pure.lang.parser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.WhitespacesAndCommentsBinder;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.util.containers.Stack;
 import in.twbs.pure.lang.psi.PureTokens;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +12,7 @@ public final class ParserContext {
     @NotNull
     private final PsiBuilder builder;
     private int column;
-    private int indentationLevel;
+    private Stack<Integer> indentationLevel = new Stack<Integer>();
 
     public boolean eof() {
         return builder.eof();
@@ -85,46 +86,33 @@ public final class ParserContext {
 
     public ParserContext(@NotNull PsiBuilder builder) {
         this.builder = builder;
+        this.indentationLevel.push(0);
     }
 
     public void whiteSpace() {
         while (!builder.eof()) {
             IElementType type = builder.getTokenType();
-            if (type == PureTokens.NL || type == PureTokens.SLCOMMENT) {
-                column = 0;
-            } else if (type == PureTokens.TAB) {
-                column = (column + 1) >> 3 << 3;
-            } else if (type == PureTokens.WS || type == PureTokens.MLCOMMENT) {
-                String text = builder.getTokenText();
-                if (text != null) {
-                    for (int i = 0; i < text.length(); i++) {
-                        char ch = builder.getOriginalText().charAt(i);
-                        if (ch == '\n') {
-                            column = 0;
-                        } else if (ch == '\t') {
-                            column = (column + 1) >> 3 << 3;
-                        } else {
-                            column++;
-                        }
-                    }
-                }
+            if (type == PureTokens.WS) {
+                advance();
             } else {
                 break;
             }
-            builder.advanceLexer();
         }
     }
 
     public void advance() {
         String text = builder.getTokenText();
         if (text != null) {
-            if (builder.getTokenType() == PureTokens.STRING) {
+            IElementType type = builder.getTokenType();
+            if (type == PureTokens.STRING || type == PureTokens.WS) {
                 for (int i = 0; i < text.length(); i++) {
                     char ch = text.charAt(i);
                     if (ch == '\n') {
                         column = 0;
                     } else if (ch == '\t') {
                         column = (column + 1) >> 3 << 3;
+                    } else {
+                        column++;
                     }
                 }
             } else {
@@ -180,10 +168,21 @@ public final class ParserContext {
     }
 
     public int getIndentationLevel() {
-        return indentationLevel;
+        return indentationLevel.peek();
     }
 
-    public void setIndentationLevel(int indentationLevel) {
-        this.indentationLevel = indentationLevel;
+    public int getLastIndentationLevel() {
+        if (indentationLevel.size() >= 2) {
+            return indentationLevel.get(indentationLevel.size() - 2);
+        }
+        return 0;
+    }
+
+    public void pushIndentationLevel() {
+        indentationLevel.push(column);
+    }
+
+    public void popIndentationLevel() {
+        indentationLevel.tryPop();
     }
 }
