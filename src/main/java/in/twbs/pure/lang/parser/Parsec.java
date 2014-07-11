@@ -16,11 +16,6 @@ public abstract class Parsec {
     }
 
     @NotNull
-    public Parsec then(@NotNull IElementType type) {
-        return then(Combinators.token(type));
-    }
-
-    @NotNull
     public Parsec lexeme(@NotNull IElementType type) {
         return then(Combinators.lexeme(Combinators.token(type)));
     }
