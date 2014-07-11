@@ -27,8 +27,12 @@ public class ParserInfo {
             } else {
                 return new ParserInfo(info2.position, info2.expected, success);
             }
-        } else if (info1.position < info2.position) {
-            return info1;
+        } else if (info1.position > info2.position) {
+            if (success == info1.success) {
+                return info1;
+            } else {
+                return new ParserInfo(info1.position, info1.expected, success);
+            }
         } else {
             int position = info1.position;
             LinkedHashSet<String> expected = new LinkedHashSet<String>();

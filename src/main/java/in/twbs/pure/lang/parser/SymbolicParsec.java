@@ -18,12 +18,16 @@ public class SymbolicParsec extends Parsec {
     @NotNull
     @Override
     public ParserInfo parse(@NotNull ParserContext context) {
+        int startPosition = context.getPosition();
         PsiBuilder.Marker pack = context.start();
         ParserInfo info = ref.parse(context);
         if (info.success) {
             pack.done(node);
         } else {
             pack.drop();
+        }
+        if (startPosition == context.getPosition()) {
+            info = new ParserInfo(info.position, this, info.success);
         }
         return info;
     }
