@@ -97,7 +97,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                         attempt(lexeme(IDENT).or(lexeme(STRING))),
                         reserved(DCOLON))
         );
-        private final Parsec parseRowEnding = optional(indented(lexeme(PIPE)).then(indented(lexeme(IDENT))).as(TypeVar));
+        private final Parsec parseRowEnding = optional(indented(lexeme("|")).then(indented(lexeme(IDENT))).as(TypeVar));
         private final Parsec parseRowNonEmpty
                 = commaSep1(parseNameAndType.then(parsePolyTypeRef))
                 .then(parseRowEnding)
@@ -155,13 +155,13 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
         private final ParsecRef parseValueRef = ref();
         private final ParsecRef parseLocalDeclarationRef = ref();
 
-        private final SymbolicParsec parseGuard = indented(lexeme(PIPE)).then(indented(parseValueRef)).as(Guard);
+        private final SymbolicParsec parseGuard = indented(lexeme("|")).then(indented(parseValueRef)).as(Guard);
         private final SymbolicParsec parseDataDeclaration
                 = reserved(DATA)
                 .then(indented(properName))
                 .then(many(indented(identifier)).as(TypeArgs))
                 .then(optional(attempt(lexeme(EQ))
-                        .then(sepBy1(properName.then(many(indented(parseTypeAtom))), lexeme(PIPE)))))
+                        .then(sepBy1(properName.then(many(indented(parseTypeAtom))), lexeme("|")))))
                 .as(DataDeclaration);
         private final SymbolicParsec parseTypeDeclaration
                 = attempt(parseIdent.then(indented(lexeme(DCOLON))))
@@ -226,7 +226,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 parseIdent.as(ValueRef),
                 properName.then(
                         optional(parens(choice(
-                                        token(DDOT),
+                                        lexeme(DDOT),
                                         commaSep1(properName)
                                 )
                         ))
@@ -235,7 +235,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
 
         private final SymbolicParsec parseTypeClassDeclaration
                 = lexeme(CLASS)
-                .then(optional(indented(parens(commaSep1(parseQualified(properName).then(many(parseTypeAtom))))).then(reserved(DERIVE)).as(pImplies)))
+                .then(optional(indented(parens(commaSep1(parseQualified(properName).then(many(parseTypeAtom))))).then(reserved("<=")).as(pImplies)))
                 .then(indented(properName.as(pClassName)))
                 .then(many(indented(lexeme(IDENT))))
                 .then(optional(attempt(
@@ -298,7 +298,8 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
 
         private final SymbolicParsec parseModule
                 = reserved(MODULE)
-                .then(indented(moduleName.then(optional(parens(commaSep1(parseDeclarationRef))))))
+                .then(indented(moduleName))
+                .then(optional(parens(commaSep1(parseDeclarationRef))))
                 .then(reserved(WHERE))
                 .then(indentedList(parseDeclaration))
                 .as(Module);

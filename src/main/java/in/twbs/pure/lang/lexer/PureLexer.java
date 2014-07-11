@@ -39,6 +39,8 @@ public final class PureLexer extends LookAheadLexer {
                         }
                     }
                     type = PureTokens.WS;
+                } else if (type == PureTokens.PIPE) {
+                    type = PureTokens.OPERATOR;
                 }
                 return type;
             }

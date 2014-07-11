@@ -26,7 +26,7 @@ public class SymbolicParsec extends Parsec {
         } else {
             pack.drop();
         }
-        if (startPosition == context.getPosition()) {
+        if (startPosition == info.position) {
             info = new ParserInfo(info.position, this, info.success);
         }
         return info;

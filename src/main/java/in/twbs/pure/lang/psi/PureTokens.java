@@ -31,7 +31,6 @@ public interface PureTokens {
     PureElementType WHERE = new PureElementType("where");
     PureElementType FORALL = new PureElementType("forall");
     PureElementType DARROW = new PureElementType("=>");
-    PureElementType DERIVE = new PureElementType("<=");
     PureElementType ARROW = new PureElementType("->");
     PureElementType EQ = new PureElementType("=");
     PureElementType DOT = new PureElementType(".");

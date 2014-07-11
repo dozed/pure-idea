@@ -100,7 +100,6 @@ charControl = "^" [:uppercase:]
 "forall"                       { return FORALL; }
 
 "=>"                           { return DARROW; }
-"<="                           { return DERIVE; }
 "->"                           { return ARROW; }
 "="                            { return EQ; }
 "."                            { return DOT; }

@@ -164,10 +164,10 @@ public class Combinators {
                     if (info.success) {
                         if (position == context.getPosition()) {
                             // TODO: this should not be allowed.
-                            return new ParserInfo(info.position, info.expected, false);
+                            return ParserInfo.merge(info, new ParserInfo(context.getPosition(), info.expected, false), false);
                         }
                     } else if (position == context.getPosition()) {
-                        return new ParserInfo(info.position, info.expected, true);
+                        return ParserInfo.merge(info, new ParserInfo(context.getPosition(), info.expected, true), true);
                     } else {
                         return info;
                     }
@@ -359,7 +359,7 @@ public class Combinators {
                     context.advance();
                 }
                 start.error(info.toString());
-                return new ParserInfo(context.getPosition(), this, true);
+                return new ParserInfo(context.getPosition(), info.expected, true);
             }
 
             @NotNull
@@ -393,7 +393,7 @@ public class Combinators {
                     context.advance();
                 }
                 start.error(info.toString());
-                return new ParserInfo(context.getPosition(), this, true);
+                return new ParserInfo(context.getPosition(), info.expected, true);
             }
 
             @NotNull
