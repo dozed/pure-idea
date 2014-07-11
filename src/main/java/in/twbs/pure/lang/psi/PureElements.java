@@ -54,9 +54,11 @@ public interface PureElements {
     PureElementType BooleanLiteral = new PureElementType("BooleanLiteral");
     PureElementType NumericLiteral = new PureElementType("NumericLiteral");
     PureElementType StringLiteral = new PureElementType("StringLiteral");
+    PureElementType ArrayLiteral = new PureElementType("ArrayLiteral");
     PureElementType ObjectLiteral = new PureElementType("ObjectLiteral");
 
     PureElementType Abs = new PureElementType("Abs");
+    PureElementType IdentInfix = new PureElementType("IdentInfix");
     PureElementType Var = new PureElementType("Var");
     PureElementType Constructor = new PureElementType("Constructor");
     PureElementType Case = new PureElementType("Case");

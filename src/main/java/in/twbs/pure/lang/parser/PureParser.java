@@ -94,7 +94,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
         );
         private final Parsec parseRowEnding = optional(indented(lexeme(PIPE)).then(indented(lexeme(IDENT))).as(TypeVar));
         private final Parsec parseRowNonEmpty
-                = commaSep(parseNameAndType.then(parsePolyTypeRef).then(parseRowEnding).as(Row));
+                = commaSep1(parseNameAndType.then(parsePolyTypeRef).then(parseRowEnding).as(Row));
         private final Parsec parseObject = braces(optional(attempt(parseRowNonEmpty)));
         private final Parsec parseTypeAtom = indented(
                 choice(
@@ -247,7 +247,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 .as(TypeInstanceDeclaration);
 
         private final Parsec qualImport
-                = reserved(token("qualifield"))
+                = reserved(token("qualified"))
                 .then(indented(moduleName))
                 .then(optional(indented(parens(commaSep(parseDeclarationRef)))))
                 .then(reserved(token("as")))
@@ -294,7 +294,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
         private final SymbolicParsec parseBooleanLiteral = reserved(token("true")).or(reserved(token("false"))).as(BooleanLiteral);
         private final SymbolicParsec parseNumericLiteral = reserved(NATURAL).or(reserved(token("false"))).as(NumericLiteral);
         private final SymbolicParsec parseStringLiteral = reserved(STRING).as(StringLiteral);
-        private final SymbolicParsec parseArrayLiteral = squares(commaSep(parseValueRef)).as(StringLiteral);
+        private final SymbolicParsec parseArrayLiteral = squares(commaSep(parseValueRef)).as(ArrayLiteral);
         private final SymbolicParsec parseIdentifierAndValue = indented(identifier.or(stringLiteral)).then(indented(lexeme(token(":")))).then(indented(parseValueRef)).as(ObjectBinderField);
         private final SymbolicParsec parseObjectLiteral = braces(commaSep(parseIdentifierAndValue)).as(ObjectLiteral);
 
@@ -303,7 +303,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 .then(many1(indented(parseIdent.or(parseBinderNoParensRef).as(Abs))))
                 .then(indented(reserved(ARROW)))
                 .then(parseValueRef);
-        private final SymbolicParsec parseVar = parseQualified(identifier).as(Var);
+        private final SymbolicParsec parseVar = parseQualified(parseIdent).as(Var);
         private final SymbolicParsec parseConstructor = parseQualified(properName).as(Constructor);
         private final SymbolicParsec parseCaseAlternative
                 = parseBinderRef
@@ -376,7 +376,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 choice(
                         reserved(TICK).then(parseQualified(identifier)).lexeme(TICK),
                         parseQualified(lexeme(OPERATOR))
-                );
+                ).as(IdentInfix);
 
         private final Parsec indexersAndAccessors
                 = parseValueAtom
@@ -391,7 +391,11 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 .then(many(choice(indented(indexersAndAccessors), attempt(indented(lexeme(DCOLON)).then(parsePolyTypeRef)))));
 
         private final ParsecRef parsePrefixRef = ref();
-        private final SymbolicParsec parsePrefix = choice(parseValuePostFix, indented(token("-")).then(parsePrefixRef).as(UnaryMinus)).as(PrefixValue);
+        private final SymbolicParsec parsePrefix =
+                choice(
+                        parseValuePostFix,
+                        indented(token("-")).then(parsePrefixRef).as(UnaryMinus)
+                ).as(PrefixValue);
 
         {
             parsePrefixRef.setRef(parsePrefix);
@@ -399,7 +403,9 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
 
         private final SymbolicParsec parseValue
                 = parsePrefix
-                .then(optional(attempt(indented(parseIdentInfix)).then(parseValueRef)))
+                .then(optional(
+                        attempt(indented(parseIdentInfix)).then(parseValueRef)
+                ))
                 .as(Value);
 
         // Binders

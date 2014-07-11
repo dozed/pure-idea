@@ -59,16 +59,9 @@ public class ParsingTestBase extends PsiTestCase {
     private void testExample(@NotNull File fileName, final boolean passing) throws Exception {
         PureFile file = (PureFile) createFile(fileName.getName(), readFile(fileName));
 
-        if (passing) {
-            file.accept(new PsiRecursiveElementVisitor() {
-                @Override
-                public void visitElement(PsiElement element) {
-                    assertFalse(element instanceof PsiErrorElement);
-                }
-            });
-        }
-
         String psiTree = DebugUtil.psiToString(file, false);
         FileUtil.writeToFile(new File(fileName.getAbsolutePath() + ".psi"), psiTree);
+
+        assertEquals(fileName.getName() +  " failed.", passing, !psiTree.contains("PsiErrorElement"));
     }
 }
