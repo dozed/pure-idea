@@ -1,7 +1,4 @@
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiRecursiveElementVisitor;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.util.Processor;
@@ -62,6 +59,6 @@ public class ParsingTestBase extends PsiTestCase {
         String psiTree = DebugUtil.psiToString(file, false);
         FileUtil.writeToFile(new File(fileName.getAbsolutePath() + ".psi"), psiTree);
 
-        assertEquals(fileName.getName() +  " failed.", passing, !psiTree.contains("PsiErrorElement"));
+        assertEquals(fileName.getName() + " failed.", passing, !psiTree.contains("PsiErrorElement"));
     }
 }
