@@ -65,7 +65,7 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, PureTokens.kOperators, OPERATOR);
         fillMap(ATTRIBUTES, TokenSet.create(PureTokens.IDENT, PureTokens.OPERATOR), VARIABLE);
         fillMap(ATTRIBUTES, TokenSet.create(PureTokens.PROPER_NAME), METHOD_DECLARATION);
-        fillMap(ATTRIBUTES, TokenSet.create(PureElements.ModuleName), TYPE_NAME);
+        fillMap(ATTRIBUTES, TokenSet.create(PureElements.pModuleName), TYPE_NAME);
         fillMap(ATTRIBUTES, TokenSet.create(PureTokens.STRING_ESCAPED), KEYWORD);
         fillMap(ATTRIBUTES, TokenSet.create(PureTokens.STRING_GAP), STRING_GAP);
         fillMap(ATTRIBUTES, TokenSet.create(PureTokens.STRING_ERROR), CodeInsightColors.ERRORS_ATTRIBUTES);

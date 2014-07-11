@@ -38,6 +38,7 @@
         <lang.syntaxHighlighterFactory key="Purescript"
                                        implementationClass="in.twbs.pure.lang.highlight.PureSyntaxHighlighterFactory"/>
         <annotator language="Purescript" implementationClass="in.twbs.pure.lang.annotator.PureAnnotator"/>
+        <highlightVisitor id="Purescript" implementation="in.twbs.pure.lang.psi.PureHighlightVisitor"/>
     </extensions>
 
 </idea-plugin>

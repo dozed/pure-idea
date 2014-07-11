@@ -1,27 +1,42 @@
 package in.twbs.pure.lang.psi;
 
 public interface PureElements {
-    PureElementType ModuleName = new PureElementType("ModuleName");
-    PureElementType DataDeclaration = new PureElementType("DataDeclaration");
+    PureElementType Program = new PureElementType("Program");
+    PureElementType Module = new PureElementType("Module");
 
     PureElementType Star = new PureElementType("Star");
     PureElementType Bang = new PureElementType("Bang");
     PureElementType RowKind = new PureElementType("RowKind");
     PureElementType FunKind = new PureElementType("FunKind");
 
-    PureElementType Cons = new PureElementType("constructor");
     PureElementType Qualified = new PureElementType("Qualified");
     PureElementType Type = new PureElementType("Type");
     PureElementType TypeArgs = new PureElementType("TypeArgs");
-    PureElementType ForAll = new PureElementType("forall");
+    PureElementType ForAll = new PureElementType("ForAll");
+    PureElementType ConstrainedType = new PureElementType("ConstrainedType");
     PureElementType Row = new PureElementType("Row");
     PureElementType TypeVar = new PureElementType("TypeVar");
     PureElementType TypeConstructor = new PureElementType("TypeConstructor");
     PureElementType TypeApp = new PureElementType("TypeApp");
     PureElementType TypeAtom = new PureElementType("TypeAtom");
     PureElementType PolyType = new PureElementType("PolyType");
-
     PureElementType Binder = new PureElementType("Binder");
+
+    PureElementType DataDeclaration = new PureElementType("DataDeclaration");
+    PureElementType PositionedDeclaration = new PureElementType("PositionedDeclaration");
+    PureElementType TypeDeclaration = new PureElementType("TypeDeclaration");
+    PureElementType TypeSynonymDeclaration = new PureElementType("TypeSynonymDeclaration");
+    PureElementType ValueDeclaration = new PureElementType("ValueDeclaration");
+    PureElementType ExternDataDeclaration = new PureElementType("ExternDataDeclaration");
+    PureElementType ExternInstanceDeclaration = new PureElementType("ExternInstanceDeclaration");
+    PureElementType ExternDeclaration = new PureElementType("ExternDeclaration");
+    PureElementType FixityDeclaration = new PureElementType("FixityDeclaration");
+    PureElementType ImportDeclaration = new PureElementType("ImportDeclaration");
+    PureElementType LocalDeclaration = new PureElementType("LocalDeclaration");
+    PureElementType PositionedDeclarationRef = new PureElementType("PositionedDeclarationRef");
+    PureElementType TypeClassDeclaration = new PureElementType("TypeClassDeclaration");
+    PureElementType TypeInstanceDeclaration = new PureElementType("TypeInstanceDeclaration");
+
     PureElementType NullBinder = new PureElementType("NullBinder");
     PureElementType StringBinder = new PureElementType("StringBinder");
     PureElementType BooleanBinder = new PureElementType("BooleanBinder");
@@ -32,20 +47,6 @@ public interface PureElements {
     PureElementType ObjectBinder = new PureElementType("ObjectBinder");
     PureElementType ObjectBinderField = new PureElementType("ObjectBinderField");
     PureElementType Guard = new PureElementType("Guard");
-
-    PureElementType PositionedDeclaration = new PureElementType("PositionedDeclaration");
-    PureElementType TypeDeclaration = new PureElementType("TypeDeclaration");
-    PureElementType TypeSynonymDeclaration = new PureElementType("TypeSynonymDeclaration");
-    PureElementType ValueDeclaration = new PureElementType("ValueDeclaration");
-    PureElementType ExternDataDeclaration = new PureElementType("ExternDataDeclaration");
-    PureElementType ExternInstanceDeclaration = new PureElementType("ExternInstanceDeclaration");
-    PureElementType ExternDeclaration = new PureElementType("ExternDeclaration");
-    PureElementType FixityDeclaration = new PureElementType("FixityDeclaration");
-    PureElementType ImportDeclaration = new PureElementType("ImportDeclaration");
-    PureElementType PositionedDeclarationRef = new PureElementType("PositionedDeclarationRef");
-    PureElementType TypeClassDeclaration = new PureElementType("TypeClassDeclaration");
-    PureElementType TypeInstanceDeclaration = new PureElementType("TypeInstanceDeclaration");
-    PureElementType Module = new PureElementType("Module");
 
     PureElementType ValueRef = new PureElementType("ValueRef");
 
@@ -70,8 +71,9 @@ public interface PureElements {
     PureElementType DoNotationValue = new PureElementType("DoNotationValue");
     PureElementType Value = new PureElementType("Value");
 
-    PureElementType Fixity = new PureElementType("fixity statement");
+    PureElementType Fixity = new PureElementType("Fixity");
     PureElementType JSRaw = new PureElementType("JavaScript");
-    PureElementType pClassName = new PureElementType("class name");
-    PureElementType pImplies = new PureElementType("implies");
+    PureElementType pModuleName = new PureElementType("ModuleName");
+    PureElementType pClassName = new PureElementType("ClassName");
+    PureElementType pImplies = new PureElementType("Implies");
 }

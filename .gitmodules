@@ -1,0 +1,4 @@
+[submodule "purescript"]
+	path = test/resources/purescript
+	url = https://github.com/purescript/purescript
+	branch = master

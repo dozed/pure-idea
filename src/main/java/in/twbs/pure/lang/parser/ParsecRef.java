@@ -3,9 +3,9 @@ package in.twbs.pure.lang.parser;
 import org.jetbrains.annotations.NotNull;
 
 public final class ParsecRef extends Parsec {
-    private SymbolicParsec ref;
+    private Parsec ref;
 
-    public void setRef(@NotNull SymbolicParsec ref) {
+    public void setRef(@NotNull Parsec ref) {
         this.ref = ref;
     }
 

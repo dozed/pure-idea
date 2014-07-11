@@ -372,8 +372,9 @@ public class Combinators {
             @NotNull
             @Override
             public ParserInfo parse(@NotNull ParserContext context) {
+                int position = context.getPosition();
                 ParserInfo info = p.parse(context);
-                if (info.success) {
+                if (info.success || position == context.getPosition()) {
                     return info;
                 }
                 context.whiteSpace();
