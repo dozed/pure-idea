@@ -15,6 +15,7 @@ public interface PureElements {
     PureElementType ForAll = new PureElementType("ForAll");
     PureElementType ConstrainedType = new PureElementType("ConstrainedType");
     PureElementType Row = new PureElementType("Row");
+    PureElementType ObjectType = new PureElementType("ObjectType");
     PureElementType TypeVar = new PureElementType("TypeVar");
     PureElementType TypeConstructor = new PureElementType("TypeConstructor");
     PureElementType TypeApp = new PureElementType("TypeApp");

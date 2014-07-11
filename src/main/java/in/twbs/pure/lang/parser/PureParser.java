@@ -99,8 +99,14 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
         );
         private final Parsec parseRowEnding = optional(indented(lexeme(PIPE)).then(indented(lexeme(IDENT))).as(TypeVar));
         private final Parsec parseRowNonEmpty
-                = commaSep1(parseNameAndType.then(parsePolyTypeRef).then(parseRowEnding).as(Row));
-        private final Parsec parseObject = braces(optional(attempt(parseRowNonEmpty)));
+                = commaSep1(parseNameAndType.then(parsePolyTypeRef))
+                .then(parseRowEnding)
+                .as(Row);
+        private final Parsec parseRowAllowEmpty
+                = commaSep(parseNameAndType.then(parsePolyTypeRef))
+                .then(parseRowEnding)
+                .as(Row);
+        private final Parsec parseObject = braces(parseRowAllowEmpty).as(ObjectType);
         private final Parsec parseTypeAtom = indented(
                 choice(
                         reserved(token("Number")),
@@ -112,7 +118,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                         attempt(parseTypeVariable),
                         attempt(parseTypeConstructor),
                         parseForAllRef,
-                        attempt(parens(attempt(parseRowNonEmpty).or(parsePolyTypeRef))))
+                        parens(attempt(parseRowNonEmpty).or(parsePolyTypeRef)))
         ).as(TypeAtom);
 
         private final Parsec parseConstrainedType =
@@ -322,7 +328,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 = reserved(CASE)
                 .then(parseValueRef)
                 .then(indented(reserved(OF)))
-                .then(indentedList(mark(parseCaseAlternative)))
+                .then(indented(indentedList(mark(parseCaseAlternative))))
                 .as(Case);
         private final SymbolicParsec parseIfThenElse
                 = reserved(IF)
@@ -425,7 +431,11 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
         private final SymbolicParsec parseVarBinder = parseIdent.as(VarBinder);
         private final SymbolicParsec parseConstructorBinder = lexeme(parseQualified(properName).then(many(indented(parseBinderNoParensRef)))).as(ConstructorBinder);
         private final SymbolicParsec parseNullaryConstructorBinder = lexeme(parseQualified(properName)).as(ConstructorBinder);
-        private final SymbolicParsec parseObjectBinder = braces(commaSep(parseIdentifierAndValue)).as(ObjectBinder);
+        private final Parsec parseIdentifierAndBinder
+                = lexeme(identifier.or(stringLiteral))
+                .then(indented(lexeme(token(EQ))))
+                .then(indented(parseBinderRef));
+        private final SymbolicParsec parseObjectBinder = braces(commaSep(parseIdentifierAndBinder)).as(ObjectBinder);
         private final SymbolicParsec parseArrayBinder = squares(commaSep(parseBinderRef)).as(ObjectBinder);
         private final SymbolicParsec parseBinderAtom = choice(
                 attempt(parseNullBinder),
