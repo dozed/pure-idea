@@ -21,16 +21,21 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
         PsiBuilder.Marker mark = context.start();
         context.whiteSpace();
         ParserInfo info = new PureParsecParser().program.parse(context);
+        IElementType nextType = null;
         if (!context.eof()) {
             PsiBuilder.Marker errorMarker = null;
             while (!context.eof()) {
                 if (context.getPosition() >= info.position && errorMarker == null) {
                     errorMarker = context.start();
+                    nextType = builder.getTokenType();
                 }
                 context.advance();
             }
             if (errorMarker != null) {
-                errorMarker.error(info.toString());
+                if (nextType != null)
+                    errorMarker.error("Unexpected " + nextType.toString() + ". " + info.toString());
+                else
+                    errorMarker.error(info.toString());
             }
         }
         mark.done(root);
@@ -169,7 +174,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 .then(many(parseBinderNoParensRef))
                 .then(optional(parseGuard))
                 .then(lexeme(indented(lexeme(EQ))).then(parseValueRef))
-                .then(optional(indented(token(WHERE)).then(indentedList1(parseLocalDeclarationRef))))
+                .then(optional(indented(lexeme(WHERE)).then(indentedList1(parseLocalDeclarationRef))))
                 .as(ValueDeclaration);
 
         private final Parsec parseDeps
