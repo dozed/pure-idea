@@ -111,11 +111,11 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
         ).as(TypeAtom);
 
         private final Parsec parseConstrainedType
-                = optional(attempt(parens(commaSep1(parseQualified(properName).then(indented(parseTypeAtom)))).then(DARROW)))
+                = optional(attempt(parens(commaSep1(parseQualified(properName).then(indented(many(parseTypeAtom))))).then(DARROW)))
                 .then(indented(parseTypeRef))
                 .as(ConstrainedType);
         private final SymbolicParsec parseForAll
-                = attempt(reserved(FORALL))
+                = reserved(FORALL)
                 .then(many1(indented(identifier)))
                 .then(indented(lexeme(DOT)))
                 .then(parseConstrainedType).as(ForAll);
