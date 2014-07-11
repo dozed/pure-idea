@@ -48,6 +48,11 @@ public class Combinators {
     }
 
     @NotNull
+    static Parsec lexeme(@NotNull final String text) {
+        return lexeme(token(text));
+    }
+
+    @NotNull
     static Parsec lexeme(@NotNull final Parsec p) {
         return new Parsec() {
             @NotNull
@@ -76,6 +81,10 @@ public class Combinators {
     @NotNull
     static Parsec reserved(@NotNull final Parsec p) {
         return attempt(lexeme(p));
+    }
+
+    static Parsec reserved(@NotNull final String content) {
+        return attempt(lexeme(content));
     }
 
     @NotNull
@@ -243,11 +252,6 @@ public class Combinators {
     }
 
     @NotNull
-    public static Parsec angles(@NotNull Parsec p) {
-        return lexeme(token("<")).then(indented(p)).then(indented(lexeme(token(">"))));
-    }
-
-    @NotNull
     public static Parsec indented(@NotNull final Parsec p) {
         return new Parsec() {
             @NotNull
@@ -368,35 +372,36 @@ public class Combinators {
 
     @NotNull
     static Parsec untilSame(@NotNull final Parsec p) {
-        return new Parsec() {
-            @NotNull
-            @Override
-            public ParserInfo parse(@NotNull ParserContext context) {
-                int position = context.getPosition();
-                ParserInfo info = p.parse(context);
-                if (info.success || position == context.getPosition()) {
-                    return info;
-                }
-                context.whiteSpace();
-                if (context.getColumn() <= context.getLastIndentationLevel()) {
-                    return info;
-                }
-                PsiBuilder.Marker start = context.start();
-                while (!context.eof()) {
-                    if (context.getColumn() == context.getIndentationLevel()) {
-                        break;
-                    }
-                    context.advance();
-                }
-                start.error(info.toString());
-                return new ParserInfo(context.getPosition(), this, true);
-            }
-
-            @NotNull
-            @Override
-            public String getName() {
-                return p.getName();
-            }
-        };
+        return p;
+//        return new Parsec() {
+//            @NotNull
+//            @Override
+//            public ParserInfo parse(@NotNull ParserContext context) {
+//                int position = context.getPosition();
+//                ParserInfo info = p.parse(context);
+//                if (info.success || position == context.getPosition()) {
+//                    return info;
+//                }
+//                context.whiteSpace();
+//                if (context.getColumn() <= context.getLastIndentationLevel()) {
+//                    return info;
+//                }
+//                PsiBuilder.Marker start = context.start();
+//                while (!context.eof()) {
+//                    if (context.getColumn() == context.getIndentationLevel()) {
+//                        break;
+//                    }
+//                    context.advance();
+//                }
+//                start.error(info.toString());
+//                return new ParserInfo(context.getPosition(), this, true);
+//            }
+//
+//            @NotNull
+//            @Override
+//            public String getName() {
+//                return p.getName();
+//            }
+//        };
     }
 }
