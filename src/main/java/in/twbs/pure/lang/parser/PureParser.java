@@ -413,7 +413,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
         private final SymbolicParsec parseNullaryConstructorBinder = lexeme(parseQualified(properName)).as(ConstructorBinder);
         private final SymbolicParsec parseObjectBinder = braces(commaSep(parseIdentifierAndValue)).as(ObjectBinder);
         private final SymbolicParsec parseArrayBinder = squares(commaSep(parseBinderRef)).as(ObjectBinder);
-        private final SymbolicParsec parseBinder = choice(
+        private final SymbolicParsec parseBinderAtom = choice(
                 attempt(parseNullBinder),
                 attempt(parseStringBinder),
                 attempt(parseBooleanBinder),
@@ -424,7 +424,11 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 attempt(parseObjectBinder),
                 attempt(parseArrayBinder),
                 attempt(parens(parseBinderRef))
-        ).as(Binder);
+        ).as(BinderAtom);
+        private final SymbolicParsec parseBinder
+                = parseBinderAtom
+                .then(optional(lexeme(token(":")).then(parseBinderRef)))
+                .as(Binder);
         private final SymbolicParsec parseBinderNoParens = choice(
                 attempt(parseNullBinder),
                 attempt(parseStringBinder),

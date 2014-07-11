@@ -20,7 +20,6 @@ public interface PureElements {
     PureElementType TypeApp = new PureElementType("TypeApp");
     PureElementType TypeAtom = new PureElementType("TypeAtom");
     PureElementType PolyType = new PureElementType("PolyType");
-    PureElementType Binder = new PureElementType("Binder");
 
     PureElementType DataDeclaration = new PureElementType("DataDeclaration");
     PureElementType PositionedDeclaration = new PureElementType("PositionedDeclaration");
@@ -37,6 +36,7 @@ public interface PureElements {
     PureElementType TypeClassDeclaration = new PureElementType("TypeClassDeclaration");
     PureElementType TypeInstanceDeclaration = new PureElementType("TypeInstanceDeclaration");
 
+    PureElementType Guard = new PureElementType("Guard");
     PureElementType NullBinder = new PureElementType("NullBinder");
     PureElementType StringBinder = new PureElementType("StringBinder");
     PureElementType BooleanBinder = new PureElementType("BooleanBinder");
@@ -46,7 +46,8 @@ public interface PureElements {
     PureElementType ConstructorBinder = new PureElementType("ConstructorBinder");
     PureElementType ObjectBinder = new PureElementType("ObjectBinder");
     PureElementType ObjectBinderField = new PureElementType("ObjectBinderField");
-    PureElementType Guard = new PureElementType("Guard");
+    PureElementType BinderAtom = new PureElementType("BinderAtom");
+    PureElementType Binder = new PureElementType("Binder");
 
     PureElementType ValueRef = new PureElementType("ValueRef");
 
