@@ -110,7 +110,7 @@ public final class ParserContext {
                     if (ch == '\n') {
                         column = 0;
                     } else if (ch == '\t') {
-                        column = (column + 1) >> 3 << 3;
+                        column = column - column % 8 + 8;
                     } else {
                         column++;
                     }

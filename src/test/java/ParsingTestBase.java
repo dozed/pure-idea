@@ -59,6 +59,8 @@ public class ParsingTestBase extends PsiTestCase {
         String psiTree = DebugUtil.psiToString(file, false);
         FileUtil.writeToFile(new File(fileName.getAbsolutePath() + ".psi"), psiTree);
 
-        assertEquals(fileName.getName() + " failed.", passing, !psiTree.contains("PsiErrorElement"));
+        if (passing) {
+            assertEquals(fileName.getName() + " failed.", true, !psiTree.contains("PsiErrorElement"));
+        }
     }
 }

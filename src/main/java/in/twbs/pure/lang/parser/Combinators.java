@@ -372,36 +372,35 @@ public class Combinators {
 
     @NotNull
     static Parsec untilSame(@NotNull final Parsec p) {
-        return p;
-//        return new Parsec() {
-//            @NotNull
-//            @Override
-//            public ParserInfo parse(@NotNull ParserContext context) {
-//                int position = context.getPosition();
-//                ParserInfo info = p.parse(context);
-//                if (info.success || position == context.getPosition()) {
-//                    return info;
-//                }
-//                context.whiteSpace();
-//                if (context.getColumn() <= context.getLastIndentationLevel()) {
-//                    return info;
-//                }
-//                PsiBuilder.Marker start = context.start();
-//                while (!context.eof()) {
-//                    if (context.getColumn() == context.getIndentationLevel()) {
-//                        break;
-//                    }
-//                    context.advance();
-//                }
-//                start.error(info.toString());
-//                return new ParserInfo(context.getPosition(), this, true);
-//            }
-//
-//            @NotNull
-//            @Override
-//            public String getName() {
-//                return p.getName();
-//            }
-//        };
+        return new Parsec() {
+            @NotNull
+            @Override
+            public ParserInfo parse(@NotNull ParserContext context) {
+                int position = context.getPosition();
+                ParserInfo info = p.parse(context);
+                if (info.success || position == context.getPosition()) {
+                    return info;
+                }
+                context.whiteSpace();
+                if (context.getColumn() <= context.getLastIndentationLevel()) {
+                    return info;
+                }
+                PsiBuilder.Marker start = context.start();
+                while (!context.eof()) {
+                    if (context.getColumn() == context.getIndentationLevel()) {
+                        break;
+                    }
+                    context.advance();
+                }
+                start.error(info.toString());
+                return new ParserInfo(context.getPosition(), this, true);
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return p.getName();
+            }
+        };
     }
 }
