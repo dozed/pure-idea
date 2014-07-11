@@ -295,7 +295,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
         private final Parsec program = indentedList(parseModule).as(Program);
         // Literals
         private final SymbolicParsec parseBooleanLiteral = reserved(token("true")).or(reserved(token("false"))).as(BooleanLiteral);
-        private final SymbolicParsec parseNumericLiteral = reserved(NATURAL).or(reserved(token("false"))).as(NumericLiteral);
+        private final SymbolicParsec parseNumericLiteral = reserved(NATURAL).or(reserved(FLOAT)).as(NumericLiteral);
         private final SymbolicParsec parseStringLiteral = reserved(STRING).as(StringLiteral);
         private final SymbolicParsec parseArrayLiteral = squares(commaSep(parseValueRef)).as(ArrayLiteral);
         private final SymbolicParsec parseIdentifierAndValue = indented(identifier.or(stringLiteral)).then(indented(lexeme(token(":")))).then(indented(parseValueRef)).as(ObjectBinderField);

@@ -30,6 +30,9 @@ decimal = [0-9]+
 hexadecimal = [xX][0-9a-zA-Z]+
 octal = [oO][0-7]+
 stringChar = [^\"\\\0-\u001A]
+fractExponent = {fraction} {exponent}? | {exponent}
+fraction = "." {decimal}
+exponent = [eE] [+\-]? {decimal}
 escapeEmpty = "&"
 escapeGap = {whitespace}*"\\"
 escapeCode = {charEsc} | {charNum} | {charAscii} | {charControl}
@@ -118,7 +121,7 @@ charControl = "^" [:uppercase:]
 "}"                            { return RCURLY; }
 
 "0"({hexadecimal}|{octal}|{decimal})|{decimal} { return NATURAL; }
-
+{decimal}{fractExponent}       { return FLOAT; }
 "\""                           { yybegin(STRINGS); return STRING; }
 
 {identStart}{identLetter}*     { return IDENT; }
