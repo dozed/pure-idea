@@ -8,12 +8,12 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import com.intellij.ui.JBColor;
 import in.twbs.pure.lang.lexer.PureHighlightLexer;
 import in.twbs.pure.lang.psi.PureElements;
 import in.twbs.pure.lang.psi.PureTokens;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +34,7 @@ public class PureSyntaxHighlighter extends SyntaxHighlighterBase {
 
     static {
         STRING_GAP_ATTR = STRING.getDefaultAttributes().clone();
-        STRING_GAP_ATTR.setForegroundColor(Color.GRAY);
+        STRING_GAP_ATTR.setForegroundColor(JBColor.GRAY);
     }
 
     public static final TextAttributesKey STRING_GAP = createTextAttributesKey("pure.STRING_GAP", STRING_GAP_ATTR);
