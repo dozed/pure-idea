@@ -2,12 +2,6 @@ Pure IDEA
 =========
 An IntelliJ IDEA plugin for PureScript.
 
-Snapshots
----------
-[Parsing prelude.purs:]: img/prelude.png "Prelude"
-
-[Parsing edited examples/passing/Where.purs and introducing an error.]: img/error.png "Error recovery"
-
 Introduction
 ------------
 
@@ -38,6 +32,16 @@ In a longer term, we will seek to support:
 1. Refactoring across the project.
 1. Linting (we will need a pslint of some sort).
 1. Formatting (only if the layout becomes extremely solid).
+
+Snapshots
+---------
+Parsing prelude.purs:
+
+![](img/prelude.png "Prelude")
+
+Parsing edited examples/passing/Where.purs and introducing an error.
+
+![](img/error.png "Error recovery")
 
 Contributing
 ------------
