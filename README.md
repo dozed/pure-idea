@@ -4,11 +4,9 @@ An IntelliJ IDEA plugin for PureScript.
 
 Snapshots
 ---------
-Parsing prelude.purs:
-[img/prelude.png]
+[Parsing prelude.purs:](img/prelude.png)
 
-Parsing edited examples/passing/Where.purs and introducing an error.
-[img/error.png]
+[Parsing edited examples/passing/Where.purs and introducing an error.](img/error.png)
 
 Introduction
 ------------
