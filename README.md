@@ -2,6 +2,14 @@ Pure IDEA
 =========
 An IntelliJ IDEA plugin for PureScript.
 
+Snapshots
+---------
+Parsing prelude.purs:
+[img/prelude.png]
+
+Parsing edited examples/passing/Where.purs and introducing an error.
+[img/error.png]
+
 Introduction
 ------------
 
@@ -9,7 +17,9 @@ Pure IDEA is an IntelliJ IDEA plugin for [PureScript](https://github.com/purescr
 Currently, it is a working in progress and does not support too many functions. We just reached the point where
 we can:
 
-1. Syntax highlighting and grammar checking.
+1. Syntax highlighting. We wrote a minimum parser combinator library in Java and it can recover from syntax error 
+and continue parsing in some cases.
+1. Grammar checking.
 
 and that's it... :( We planned to make it much better than this. These will be supported pretty soon:
 
