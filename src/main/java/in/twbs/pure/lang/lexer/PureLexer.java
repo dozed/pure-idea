@@ -1,9 +1,6 @@
 package in.twbs.pure.lang.lexer;
 
-import com.intellij.lexer.FlexAdapter;
-import com.intellij.lexer.Lexer;
-import com.intellij.lexer.LookAheadLexer;
-import com.intellij.lexer.MergingLexerAdapterBase;
+import com.intellij.lexer.*;
 import com.intellij.psi.tree.IElementType;
 import in.twbs.pure.lang.psi.PureTokens;
 
@@ -16,10 +13,10 @@ public final class PureLexer extends LookAheadLexer {
 
     private static final class MergedPureLexer extends MergingLexerAdapterBase {
         public MergedPureLexer() {
-            super(new FlexAdapter(new _PureLexer((Reader) null)), mergeFunction);
+            super(new FlexAdapter(new _PureLexer((Reader) null)));
         }
 
-        private static final MergingLexerAdapterBase.MergeFunction mergeFunction = new MergeFunction() {
+        private static final MergeFunction mergeFunction = new MergeFunction() {
             @Override
             public IElementType merge(IElementType type, Lexer originalLexer) {
                 if (type == PureTokens.STRING) {
@@ -45,5 +42,10 @@ public final class PureLexer extends LookAheadLexer {
                 return type;
             }
         };
+
+        @Override
+        public MergeFunction getMergeFunction() {
+            return mergeFunction;
+        }
     }
 }
