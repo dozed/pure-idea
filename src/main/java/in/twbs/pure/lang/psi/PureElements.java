@@ -36,6 +36,7 @@ public interface PureElements {
     PureElementType PositionedDeclarationRef = new PureElementType("PositionedDeclarationRef");
     PureElementType TypeClassDeclaration = new PureElementType("TypeClassDeclaration");
     PureElementType TypeInstanceDeclaration = new PureElementType("TypeInstanceDeclaration");
+    PureElementType NewtypeDeclaration = new PureElementType("NewtypeDeclaration");
 
     PureElementType Guard = new PureElementType("Guard");
     PureElementType NullBinder = new PureElementType("NullBinder");

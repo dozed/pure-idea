@@ -9,6 +9,7 @@ import in.twbs.pure.lang.psi.PureTokens;
 import org.jetbrains.annotations.NotNull;
 
 import static in.twbs.pure.lang.parser.Combinators.*;
+import static in.twbs.pure.lang.parser.Combinators.reserved;
 
 public class PureParser implements PsiParser, PureTokens, PureElements {
     public final static PureParsecParser PARSER = new PureParsecParser();
@@ -48,7 +49,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
 
         @NotNull
         private Parsec parseQualified(@NotNull Parsec p) {
-            return attempt(many(attempt(token(PROPER_NAME).then(token(DOT)))).then(p).as(Qualified));
+            return attempt(many(attempt(token(PROPER_NAME).then(token(DOT))).as(pModuleName)).then(p).as(Qualified));
         }
 
         private final Parsec identifier = reserved(IDENT);
@@ -74,8 +75,8 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
 
         // Kinds.hs
         private final ParsecRef parseKindRef = ref();
-        private final SymbolicParsec parseStar = lexeme("*").as(Star);
-        private final SymbolicParsec parseBang = lexeme("!").as(Bang);
+        private final SymbolicParsec parseStar = keyword(START, "*").as(Star);
+        private final SymbolicParsec parseBang = keyword(BANG, "!").as(Bang);
         private final Parsec parseKindAtom = indented(choice(parseStar, parseBang, parens(parseKindRef)));
         private final SymbolicParsec parseKindPrefix = many(lexeme("#")).then(parseKindAtom).as(RowKind);
         private final SymbolicParsec parseKind = parseKindPrefix.then(optional(reserved(ARROW).then(parseKindRef))).as(FunKind);
@@ -167,7 +168,13 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 = attempt(parseIdent.then(indented(lexeme(DCOLON))))
                 .then(parsePolyTypeRef)
                 .as(TypeDeclaration);
-
+        private final SymbolicParsec parseNewtypeDeclaration
+                = reserved(NEWTYPE)
+                .then(indented(properName))
+                .then(optional(indented(identifier)))
+                .then(lexeme(EQ))
+                .then(properName.then(indented(parseTypeAtom)))
+                .as(NewtypeDeclaration);
         private final SymbolicParsec parseTypeSynonymDeclaration
                 = reserved(TYPE)
                 .then(reserved(PROPER_NAME))
@@ -277,6 +284,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
 
         private final Parsec parseDeclaration = positioned(choice(
                 parseDataDeclaration,
+                parseNewtypeDeclaration,
                 parseTypeDeclaration,
                 parseTypeSynonymDeclaration,
                 parseValueDeclaration,

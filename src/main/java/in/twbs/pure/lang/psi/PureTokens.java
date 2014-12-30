@@ -30,6 +30,7 @@ public interface PureTokens {
     PureElementType IN = new PureElementType("in");
     PureElementType WHERE = new PureElementType("where");
     PureElementType FORALL = new PureElementType("forall");
+    PureElementType NEWTYPE = new PureElementType("newtype");
     PureElementType DARROW = new PureElementType("=>");
     PureElementType ARROW = new PureElementType("->");
     PureElementType EQ = new PureElementType("=");
@@ -48,6 +49,9 @@ public interface PureTokens {
     PureElementType LCURLY = new PureElementType("{");
     PureElementType RCURLY = new PureElementType("}");
 
+    PureElementType START = new PureElementType("*");
+    PureElementType BANG = new PureElementType("!");
+
     PureElementType BACKSLASH = new PureElementType("\\");
     PureElementType OPERATOR = new PureElementType("operator");
     PureElementType PROPER_NAME = new PureElementType("proper name");
@@ -59,8 +63,7 @@ public interface PureTokens {
     PureElementType NATURAL = new PureElementType("natural");
     PureElementType FLOAT = new PureElementType("float");
 
-
-    TokenSet kKeywords = TokenSet.create(DATA, TYPE, FOREIGN, IMPORT, INFIXL, INFIXR, INFIX, CLASS, INSTANCE, MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE, FORALL);
+    TokenSet kKeywords = TokenSet.create(DATA, TYPE, FOREIGN, IMPORT, INFIXL, INFIXR, INFIX, CLASS, INSTANCE, MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE, FORALL, START, BANG, NEWTYPE);
     TokenSet kStrings = TokenSet.create(STRING);
     TokenSet kOperators = TokenSet.create(DARROW, ARROW, EQ, DOT, LPAREN, RPAREN, LBRACK, RBRACK, LCURLY, RCURLY);
 }

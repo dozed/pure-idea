@@ -98,6 +98,7 @@ charControl = "^" [:uppercase:]
 "in"                           { return IN; }
 "where"                        { return WHERE; }
 "forall"                       { return FORALL; }
+"newtype"                      { return NEWTYPE; }
 
 "=>"                           { return DARROW; }
 "->"                           { return ARROW; }
