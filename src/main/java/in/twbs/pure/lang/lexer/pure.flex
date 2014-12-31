@@ -41,7 +41,7 @@ charNum = {decimal} | "x" [0-9a-zA-Z]+ | "o" [0-7]+
 charAscii = "BS"|"HT"|"LF"|"VT"|"FF"|"CR"|"SO"|"SI"|"EM"|"FS"|"GS"|"RS"|"US"|"SP"|"NUL"|"SOH"|"STX"|"ETX"|"EOT"|"ENQ"|"ACK"|"BEL"|"DLE"|"DC1"|"DC2"|"DC3"|"DC4"|"NAK"|"SYN"|"ETB"|"CAN"|"SUB"|"ESC"|"DEL"
 charControl = "^" [:uppercase:]
 
-%x COMMENT, STRINGS
+%x COMMENT, STRINGS, BLOCK_STRINGS
 
 %{
    int comment_nesting = 0;
@@ -67,6 +67,11 @@ charControl = "^" [:uppercase:]
 "\\" {escapeGap}               { return STRING_GAP; }
 "\\"                           { return STRING_ERROR; }
 [^]                            { return ERROR; }
+}
+
+<BLOCK_STRINGS> {
+"\"\"\""                       { yybegin(YYINITIAL); return STRING; }
+[^]                            { return STRING; }
 }
 
 <YYINITIAL> {
@@ -122,6 +127,7 @@ charControl = "^" [:uppercase:]
 
 "0"({hexadecimal}|{octal}|{decimal})|{decimal} { return NATURAL; }
 {decimal}{fractExponent}       { return FLOAT; }
+"\"\"\""                       { yybegin(BLOCK_STRINGS); return STRING; }
 "\""                           { yybegin(STRINGS); return STRING; }
 
 {identStart}{identLetter}*     { return IDENT; }
