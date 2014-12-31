@@ -7,6 +7,7 @@ import in.twbs.pure.lang.PureLanguage;
 import org.jetbrains.annotations.NotNull;
 
 public class PureFile extends PsiFileBase {
+
     public PureFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, PureLanguage.INSTANCE);
     }

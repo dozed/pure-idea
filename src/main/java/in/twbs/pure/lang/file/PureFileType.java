@@ -2,6 +2,7 @@ package in.twbs.pure.lang.file;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import in.twbs.pure.lang.PureLanguage;
+import in.twbs.pure.lang.icons.PureIcons;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +36,6 @@ public final class PureFileType extends LanguageFileType {
     @Nullable
     @Override
     public Icon getIcon() {
-        return null;
+        return PureIcons.FILE;
     }
 }
