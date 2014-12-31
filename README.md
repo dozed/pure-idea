@@ -53,7 +53,7 @@ Contributing
 
 Hacking
 -------
-For now, simply load the project in IntelliJ 13. Possibly changing the SDK of the project. A more specific building
+For now, simply load the project in IntelliJ 14. Possibly changing the SDK of the project. A more specific building
 instruction will be given soon.
 
 Author(s)
