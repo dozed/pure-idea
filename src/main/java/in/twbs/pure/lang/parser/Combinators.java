@@ -93,6 +93,11 @@ public class Combinators {
     }
 
     @NotNull
+    static Parsec keyword(@NotNull final IElementType tokenType, @NotNull final String content) {
+        return reserved(content).as(tokenType);
+    }
+
+    @NotNull
     static Parsec seq(@NotNull final Parsec p1, @NotNull final Parsec p2) {
         return new Parsec() {
             @NotNull
