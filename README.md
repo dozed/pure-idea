@@ -12,11 +12,11 @@ we can:
 1. Syntax highlighting. We wrote a minimum parser combinator library in Java and it can recover from syntax error 
 and continue parsing in some cases.
 1. Grammar checking.
+1. A file type icon (credit to carymrobbins).
 
 and that's it... :( We planned to make it much better than this. These will be supported pretty soon:
 
 1. A build script, probably maven or ant (I know...).
-1. A file type icon.
 1. Robust parsing.
 1. JavaScript language injection (meaning when you have a foreign import with raw JavaScript as a string literal,
 it will utilize the IDE's JavaScript functions for syntax highlighting and grammar checking).
