@@ -1,6 +1,5 @@
 package in.twbs.pure.lang;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
@@ -16,6 +15,7 @@ import in.twbs.pure.lang.file.PureFileStubType;
 import in.twbs.pure.lang.lexer.PureLexer;
 import in.twbs.pure.lang.parser.PureParser;
 import in.twbs.pure.lang.psi.PureTokens;
+import in.twbs.pure.lang.psi.cst.PureASTWrapperElement;
 import org.jetbrains.annotations.NotNull;
 
 public class PureParserDefinition implements ParserDefinition, PureTokens {
@@ -56,7 +56,7 @@ public class PureParserDefinition implements ParserDefinition, PureTokens {
     @NotNull
     @Override
     public PsiElement createElement(ASTNode node) {
-        return new ASTWrapperPsiElement(node);
+        return new PureASTWrapperElement(node);
     }
 
     @Override
