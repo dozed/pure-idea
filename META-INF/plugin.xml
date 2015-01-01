@@ -40,6 +40,7 @@
         <lang.elementManipulator forClass="in.twbs.pure.lang.psi.cst.PureASTWrapperElement"
                                  implementationClass="in.twbs.pure.lang.psi.cst.PureStringManipulator"/>
         <annotator language="Purescript" implementationClass="in.twbs.pure.lang.annotator.PureAnnotator"/>
+        <moduleType id="PURESCRIPT_MODULE" implementationClass="in.twbs.pure.lang.module.PureModuleType"/>
         <!--<highlightVisitor id="Purescript" implementation="in.twbs.pure.lang.psi.PureHighlightVisitor"/>-->
     </extensions>
 
