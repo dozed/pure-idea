@@ -37,6 +37,8 @@
                                implementationClass="in.twbs.pure.lang.PureParserDefinition"/>
         <lang.syntaxHighlighterFactory key="Purescript"
                                        implementationClass="in.twbs.pure.lang.highlight.PureSyntaxHighlighterFactory"/>
+        <lang.elementManipulator forClass="in.twbs.pure.lang.psi.cst.PureASTWrapperElement"
+                                 implementationClass="in.twbs.pure.lang.psi.cst.PureStringManipulator"/>
         <annotator language="Purescript" implementationClass="in.twbs.pure.lang.annotator.PureAnnotator"/>
         <!--<highlightVisitor id="Purescript" implementation="in.twbs.pure.lang.psi.PureHighlightVisitor"/>-->
     </extensions>
