@@ -1,9 +1,9 @@
 package in.twbs.pure.lang.psi.cst;
 
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.AbstractElementManipulator;
 import com.intellij.util.IncorrectOperationException;
-import com.jetbrains.licenseService.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 public class PureStringManipulator extends AbstractElementManipulator<PureASTWrapperElement> {
@@ -35,8 +35,8 @@ public class PureStringManipulator extends AbstractElementManipulator<PureASTWra
     }
 
     private static TextRange pairToTextRange(Pair<Integer, Integer> pair) {
-        final int start = Math.max(pair.fst, 0);
-        final int end = Math.max(pair.snd, start);
+        final int start = Math.max(pair.first, 0);
+        final int end = Math.max(pair.second, start);
         return TextRange.from(start, end);
     }
 }
