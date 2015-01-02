@@ -35,7 +35,6 @@ public interface PureTokens {
     PureElementType ARROW = new PureElementType("->");
     PureElementType EQ = new PureElementType("=");
     PureElementType DOT = new PureElementType(".");
-    PureElementType DDOT = new PureElementType("..");
 
     PureElementType SEMI = new PureElementType(";");
     PureElementType DCOLON = new PureElementType("::");

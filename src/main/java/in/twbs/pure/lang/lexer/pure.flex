@@ -109,7 +109,6 @@ charControl = "^" [:uppercase:]
 "->"                           { return ARROW; }
 "="                            { return EQ; }
 "."                            { return DOT; }
-".."                           { return DDOT; }
 "\\"                           { return BACKSLASH; }
 
 ";"                            { return SEMI; }

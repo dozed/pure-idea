@@ -1,3 +1,0 @@
-[submodule "src/test/resources/purescript"]
-	path = src/test/resources/purescript
-	url = https://github.com/purescript/purescript
