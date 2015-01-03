@@ -1,6 +1,8 @@
 package in.twbs.pure;
 
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.util.Processor;
@@ -22,7 +24,7 @@ public class ParsingTest extends PsiTestCase {
                             testExample(file, passing);
                         }
                     } catch (Exception e) {
-                        assertTrue("Failed to read file " + file.getAbsolutePath(), false);
+                        fail("Failed to read file " + file.getAbsolutePath());
                     }
                 }
                 return true;
@@ -39,12 +41,34 @@ public class ParsingTest extends PsiTestCase {
 
         String additionalTests = "src/test/resources/additional";
         FileUtil.processFilesRecursively(new File(additionalTests + "/passing"), processor(true));
+        FileUtil.processFilesRecursively(new File(additionalTests + "/perf"), processor(true));
+    }
+
+    public void testPerformance() throws Exception {
+        String perfDir = "src/test/resources/additional/perf/";
+        double emptyFile = perfExample(new File(perfDir + "Empty.purs"));
+        double longFile = perfExample(new File(perfDir + "LongFile.purs"));
+        assertTrue(longFile < emptyFile * 10);
     }
 
     public static String readFile(File file) throws IOException {
         String content = new String(FileUtil.loadFileText(file.getCanonicalFile()));
         assertNotNull(content);
         return content;
+    }
+
+    private double perfExample(@NotNull File fileName) throws Exception {
+        int N = 100;
+        String text = readFile(fileName);
+        createFile(fileName.getName(), text);
+        long start = System.nanoTime();
+        for (int i = 0; i < N; i++) {
+            createFile(fileName.getName(), text);
+        }
+        long end = System.nanoTime();
+        double v = (end - start) * 1e-6 / N;
+        System.out.printf("Parsing %s :%.3fms\n", fileName, v);
+        return v;
     }
 
     private void testExample(@NotNull File fileName, final boolean passing) throws Exception {
