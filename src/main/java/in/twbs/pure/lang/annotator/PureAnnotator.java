@@ -16,6 +16,10 @@ public class PureAnnotator implements Annotator {
         if (psiElement(PureElements.pModuleName).accepts(element)) {
             Annotation ann = holder.createInfoAnnotation(element, element.getText());
             ann.setTextAttributes(PureSyntaxHighlighter.MODULE_NAME);
+        } else if (element.getNode().getElementType() == PureElements.Identifier) {
+            Annotation ann = holder.createInfoAnnotation(element, element.getText());
+            ann.setTextAttributes(PureSyntaxHighlighter.VARIABLE);
+            ann.setTooltip("");
         }
     }
 }

@@ -53,7 +53,7 @@ FILE
                 PsiElement(whitespace)('\n\n')
       PsiElement(instance)('instance')
       PsiElement(whitespace)(' ')
-      PsiErrorElement:Expecting identifier
+      PsiErrorElement:Expecting identifier, Identifier or (
         PsiElement(proper name)('A')
         PsiElement(whitespace)(' ')
         PsiElement(proper name)('String')

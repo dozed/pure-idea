@@ -12,7 +12,7 @@ FILE
       PureASTWrapperElement(PositionedDeclarationRef)
         PsiElement(proper name)('B')
         PsiElement(()('(')
-        PsiElement(operator)('..')
+        PsiElement(..)('..')
         PsiElement())(')')
       PsiElement(,)(',')
       PsiElement(whitespace)(' ')

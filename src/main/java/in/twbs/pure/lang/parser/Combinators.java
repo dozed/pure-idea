@@ -408,4 +408,38 @@ public class Combinators {
             }
         };
     }
+
+    interface Predicate<T> {
+        boolean test(T content);
+    }
+
+    @NotNull
+    static Parsec guard(@NotNull final Parsec p, final Predicate<String> predicate, @NotNull final String errorMessage) {
+        return new Parsec() {
+            @NotNull
+            @Override
+            public ParserInfo parse(@NotNull ParserContext context) {
+                PsiBuilder.Marker pack = context.start();
+                int start = context.getPosition();
+                ParserInfo info1 = p.parse(context);
+                if (info1.success) {
+                    int end = context.getPosition();
+                    String text = context.getText(start, end);
+                    if (!predicate.test(text)) {
+                        return new ParserInfo(context.getPosition(), new String[]{errorMessage}, false);
+                    }
+                    pack.drop();
+                    return info1;
+                }
+                pack.rollbackTo();
+                return info1;
+            }
+
+            @NotNull
+            @Override
+            public String getName() {
+                return p.getName();
+            }
+        };
+    }
 }

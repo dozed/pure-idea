@@ -83,6 +83,7 @@ charControl = "^" [:uppercase:]
 
 "data"                         { return DATA; }
 "type"                         { return TYPE; }
+"newtype"                      { return NEWTYPE; }
 "foreign"                      { return FOREIGN; }
 "import"                       { return IMPORT; }
 "infixl"                       { return INFIXL; }
@@ -103,7 +104,9 @@ charControl = "^" [:uppercase:]
 "in"                           { return IN; }
 "where"                        { return WHERE; }
 "forall"                       { return FORALL; }
-"newtype"                      { return NEWTYPE; }
+"qualified"                    { return QUALIFIED; }
+"hiding"                       { return HIDING; }
+"as"                           { return AS; }
 
 "=>"                           { return DARROW; }
 "->"                           { return ARROW; }
@@ -123,6 +126,7 @@ charControl = "^" [:uppercase:]
 "]"                            { return RBRACK; }
 "{"                            { return LCURLY; }
 "}"                            { return RCURLY; }
+".."                           { return DDOT; }
 
 "0"({hexadecimal}|{octal}|{decimal})|{decimal} { return NATURAL; }
 {decimal}{fractExponent}       { return FLOAT; }

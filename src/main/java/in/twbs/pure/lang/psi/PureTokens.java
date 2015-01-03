@@ -9,6 +9,7 @@ public interface PureTokens {
     PureElementType SLCOMMENT = new PureElementType("line comment");
 
     PureElementType DATA = new PureElementType("data");
+    PureElementType NEWTYPE = new PureElementType("newtype");
     PureElementType TYPE = new PureElementType("type");
     PureElementType FOREIGN = new PureElementType("foreign");
     PureElementType IMPORT = new PureElementType("import");
@@ -29,12 +30,17 @@ public interface PureTokens {
     PureElementType FALSE = new PureElementType("false");
     PureElementType IN = new PureElementType("in");
     PureElementType WHERE = new PureElementType("where");
-    PureElementType FORALL = new PureElementType("forall");
-    PureElementType NEWTYPE = new PureElementType("newtype");
+
+    PureElementType FORALL = new PureElementType("forall");  // contextual keyword
+    PureElementType QUALIFIED = new PureElementType("qualified");  // contextual keyword
+    PureElementType HIDING = new PureElementType("hiding");  // contextual keyword
+    PureElementType AS = new PureElementType("as");  // contextual keyword
+
     PureElementType DARROW = new PureElementType("=>");
     PureElementType ARROW = new PureElementType("->");
     PureElementType EQ = new PureElementType("=");
     PureElementType DOT = new PureElementType(".");
+    PureElementType DDOT = new PureElementType("..");  // contextual keyword
 
     PureElementType SEMI = new PureElementType(";");
     PureElementType DCOLON = new PureElementType("::");
@@ -62,7 +68,9 @@ public interface PureTokens {
     PureElementType NATURAL = new PureElementType("natural");
     PureElementType FLOAT = new PureElementType("float");
 
-    TokenSet kKeywords = TokenSet.create(DATA, TYPE, FOREIGN, IMPORT, INFIXL, INFIXR, INFIX, CLASS, INSTANCE, MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE, FORALL, START, BANG, NEWTYPE);
+    TokenSet kKeywords = TokenSet.create(DATA, NEWTYPE, TYPE, FOREIGN, IMPORT, INFIXL, INFIXR, INFIX, CLASS, INSTANCE,
+            MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE, FORALL, QUALIFIED, HIDING, AS, START,
+            BANG);
     TokenSet kStrings = TokenSet.create(STRING);
     TokenSet kOperators = TokenSet.create(DARROW, ARROW, EQ, DOT, LPAREN, RPAREN, LBRACK, RBRACK, LCURLY, RCURLY);
 }

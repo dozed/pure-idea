@@ -8,6 +8,7 @@ public interface PureElements {
     PureElementType Bang = new PureElementType("Bang");
     PureElementType RowKind = new PureElementType("RowKind");
     PureElementType FunKind = new PureElementType("FunKind");
+    PureElementType Identifier = new PureElementType("Identifier");
 
     PureElementType Qualified = new PureElementType("Qualified");
     PureElementType Type = new PureElementType("Type");

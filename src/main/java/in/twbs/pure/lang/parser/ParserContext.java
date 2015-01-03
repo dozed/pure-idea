@@ -185,4 +185,9 @@ public final class ParserContext {
     public void popIndentationLevel() {
         indentationLevel.tryPop();
     }
+
+    @NotNull
+    public String getText(int start, int end) {
+        return this.builder.getOriginalText().subSequence(start, end).toString();
+    }
 }

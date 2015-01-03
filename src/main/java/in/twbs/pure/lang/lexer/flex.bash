@@ -3,7 +3,7 @@
 cd $(dirname "$0")
 
 java -jar JFlex.jar \
-    --table \
+    --pack \
     --skel idea-flex.skeleton \
     --charat --nobak \
     pure.flex
