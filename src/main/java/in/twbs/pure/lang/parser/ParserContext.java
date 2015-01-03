@@ -129,6 +129,12 @@ public final class ParserContext {
         return text;
     }
 
+    @NotNull
+    public IElementType peek() {
+        IElementType tokenType = builder.getTokenType();
+        return tokenType == null ? PureTokens.EOF : tokenType;
+    }
+
     public boolean match(@NotNull IElementType type) {
         return builder.getTokenType() == type;
     }

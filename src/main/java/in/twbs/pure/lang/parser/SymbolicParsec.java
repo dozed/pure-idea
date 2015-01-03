@@ -4,6 +4,8 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
+
 public class SymbolicParsec extends Parsec {
     @NotNull
     private final Parsec ref;
@@ -34,7 +36,25 @@ public class SymbolicParsec extends Parsec {
 
     @NotNull
     @Override
-    public String getName() {
+    public String calcName() {
         return node.toString();
+    }
+
+    @NotNull
+    @Override
+    protected HashSet<String> calcExpectedName() {
+        HashSet<String> result = new HashSet<String>();
+        result.add(node.toString());
+        return result;
+    }
+
+    @Override
+    public boolean canStartWith(@NotNull IElementType type) {
+        return ref.canStartWith(type);
+    }
+
+    @Override
+    public boolean calcCanBeEmpty() {
+        return ref.canBeEmpty();
     }
 }

@@ -1,6 +1,8 @@
 package in.twbs.pure.lang.psi;
 
 public interface PureElements {
+    PureElementType Identifier = new PureElementType("identifier");
+
     PureElementType Program = new PureElementType("Program");
     PureElementType Module = new PureElementType("Module");
 
@@ -8,7 +10,6 @@ public interface PureElements {
     PureElementType Bang = new PureElementType("Bang");
     PureElementType RowKind = new PureElementType("RowKind");
     PureElementType FunKind = new PureElementType("FunKind");
-    PureElementType Identifier = new PureElementType("Identifier");
 
     PureElementType Qualified = new PureElementType("Qualified");
     PureElementType Type = new PureElementType("Type");

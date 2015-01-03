@@ -1,5 +1,6 @@
 package in.twbs.pure.lang.psi;
 
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 
 public interface PureTokens {
@@ -73,4 +74,6 @@ public interface PureTokens {
             BANG);
     TokenSet kStrings = TokenSet.create(STRING);
     TokenSet kOperators = TokenSet.create(DARROW, ARROW, EQ, DOT, LPAREN, RPAREN, LBRACK, RBRACK, LCURLY, RCURLY);
+
+    PureElementType EOF = new PureElementType("<<eof>>");
 }

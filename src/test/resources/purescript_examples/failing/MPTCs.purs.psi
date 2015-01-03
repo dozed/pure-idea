@@ -3,10 +3,10 @@ FILE
     PureASTWrapperElement(Module)
       PsiElement(module)('module')
       PsiElement(whitespace)(' ')
-      PureASTWrapperElement(ModuleName)
-        PureASTWrapperElement(Qualified)
+      PureASTWrapperElement(Qualified)
+        PureASTWrapperElement(ModuleName)
           PsiElement(proper name)('Main')
-          PsiElement(whitespace)(' ')
+      PsiElement(whitespace)(' ')
       PsiElement(where)('where')
       PsiElement(whitespace)('\n\n')
       PureASTWrapperElement(TypeClassDeclaration)
@@ -38,7 +38,7 @@ FILE
                   PsiElement(whitespace)('\n\n')
       PsiElement(instance)('instance')
       PsiElement(whitespace)(' ')
-      PsiErrorElement:Expecting identifier, Identifier or (
+      PsiErrorElement:Expecting identifier or (
         PsiElement(proper name)('Foo')
         PsiElement(whitespace)(' ')
         PsiElement(proper name)('String')
