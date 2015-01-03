@@ -1,3 +1,5 @@
+package in.twbs.pure;
+
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.testFramework.PsiTestCase;
@@ -8,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 
-public class ParsingTestBase extends PsiTestCase {
+public class ParsingTest extends PsiTestCase {
 
     private Processor<File> processor(final boolean passing) {
         return new Processor<File>() {
