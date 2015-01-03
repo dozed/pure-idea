@@ -5,7 +5,28 @@ import com.intellij.psi.tree.IElementType;
 import in.twbs.pure.lang.psi.PureTokens;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+
 public class Combinators {
+    @NotNull
+    private static HashSet<String> strings(String... names) {
+        HashSet<String> result = new LinkedHashSet<String>();
+        for (String name : names) {
+            result.add(name);
+        }
+        return result;
+    }
+
+    @NotNull
+    private static HashSet<String> strings(HashSet<String>... names) {
+        HashSet<String> result = new LinkedHashSet<String>();
+        for (HashSet<String> name : names) {
+            result.addAll(name);
+        }
+        return result;
+    }
+
     @NotNull
     static Parsec token(@NotNull final IElementType tokenType) {
         return new Parsec() {
@@ -20,8 +41,24 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return tokenType.toString();
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return strings(tokenType.toString());
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return type == tokenType;
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return false;
             }
         };
     }
@@ -41,8 +78,24 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return "\"" + token + "\"";
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return strings("\"" + token + "\"");
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return true;
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return false;
             }
         };
     }
@@ -67,8 +120,24 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return p.getName() + " ws*";
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return p.canBeEmpty();
             }
         };
     }
@@ -113,10 +182,28 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 String name1 = p1.getName();
                 String name2 = p2.getName();
                 return name1 + " " + name2;
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                if (p1.canBeEmpty()) return strings(p1.getExpectedName(), p2.getExpectedName());
+                return p1.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                if (p1.canBeEmpty()) return p1.canStartWith(type) || p2.canStartWith(type);
+                return p1.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return p1.canBeEmpty() && p2.canBeEmpty();
             }
         };
     }
@@ -128,13 +215,25 @@ public class Combinators {
             @Override
             public ParserInfo parse(@NotNull ParserContext context) {
                 int position = context.getPosition();
-                ParserInfo info = head.parse(context);
+                ParserInfo info;
+                if (head.canBeEmpty() || head.canStartWith(context.peek())) {
+                    info = head.parse(context);
+                } else {
+                    info = new ParserInfo(position, head, false);
+                }
+
                 if (context.getPosition() > position || info.success) {
                     return info;
                 }
                 for (Parsec p2 : tail) {
-                    ParserInfo info2 = p2.parse(context);
+                    ParserInfo info2;
+                    if (p2.canBeEmpty() || p2.canStartWith(context.peek())) {
+                        info2 = p2.parse(context);
+                    } else {
+                        info2 = new ParserInfo(position, p2, false);
+                    }
                     info = ParserInfo.merge(info, info2, info2.success);
+
                     if (context.getPosition() > position || info.success) {
                         return info;
                     }
@@ -144,7 +243,7 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 // TODO: avoid unnecessary parentheses.
                 StringBuilder sb = new StringBuilder();
                 sb.append("(").append(head.getName()).append(")");
@@ -152,6 +251,35 @@ public class Combinators {
                     sb.append(" | (").append(parsec.getName()).append(")");
                 }
                 return sb.toString();
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                HashSet<String> result = new LinkedHashSet<String>();
+                result.addAll(head.getExpectedName());
+                for (Parsec parsec : tail) {
+                    result.addAll(parsec.getExpectedName());
+                }
+                return result;
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                if (head.canStartWith(type)) return true;
+                for (Parsec parsec : tail) {
+                    if (parsec.canStartWith(type)) return true;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                if (!head.canBeEmpty()) return false;
+                for (Parsec parsec : tail) {
+                    if (!parsec.canBeEmpty()) return false;
+                }
+                return true;
             }
         };
     }
@@ -169,10 +297,10 @@ public class Combinators {
                     if (info.success) {
                         if (position == context.getPosition()) {
                             // TODO: this should not be allowed.
-                            return ParserInfo.merge(info, new ParserInfo(context.getPosition(), info.expected, false), false);
+                            return ParserInfo.merge(info, new ParserInfo(context.getPosition(), info, false), false);
                         }
                     } else if (position == context.getPosition()) {
-                        return ParserInfo.merge(info, new ParserInfo(context.getPosition(), info.expected, true), true);
+                        return ParserInfo.merge(info, new ParserInfo(context.getPosition(), info, true), true);
                     } else {
                         return info;
                     }
@@ -182,8 +310,24 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return "(" + p.getName() + ")*";
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return true;
             }
         };
     }
@@ -204,14 +348,30 @@ public class Combinators {
                 if (info1.success) {
                     return info1;
                 }
-                return new ParserInfo(info1.position, info1.expected, context.getPosition() == position);
+                return new ParserInfo(info1.position, info1, context.getPosition() == position);
             }
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 // TODO: avoid unnecessary parentheses.
                 return "(" + p.getName() + ")?";
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return true;
             }
         };
     }
@@ -222,6 +382,9 @@ public class Combinators {
             @NotNull
             @Override
             public ParserInfo parse(@NotNull ParserContext context) {
+                if (!p.canBeEmpty() && !p.canStartWith(context.peek())) {
+                    return new ParserInfo(context.getPosition(), p, false);
+                }
                 PsiBuilder.Marker pack = context.start();
                 ParserInfo info1 = p.parse(context);
                 if (info1.success) {
@@ -234,9 +397,25 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 // TODO: avoid unnecessary parentheses.
                 return "try(" + p.getName() + ")";
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return p.canBeEmpty();
             }
         };
     }
@@ -270,8 +449,24 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return "indented (" + p.getName() + ")";
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return p.canBeEmpty();
             }
         };
     }
@@ -290,8 +485,24 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return "not indented (" + p.getName() + ")";
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return p.canBeEmpty();
             }
         };
     }
@@ -312,8 +523,24 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return "not indented (" + p.getName() + ")";
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return p.canBeEmpty();
             }
         };
     }
@@ -364,13 +591,29 @@ public class Combinators {
                     context.advance();
                 }
                 start.error(info.toString());
-                return new ParserInfo(context.getPosition(), info.expected, true);
+                return new ParserInfo(context.getPosition(), info, true);
             }
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return p.getName();
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return p.canBeEmpty();
             }
         };
     }
@@ -398,13 +641,29 @@ public class Combinators {
                     context.advance();
                 }
                 start.error(info.toString());
-                return new ParserInfo(context.getPosition(), info.expected, true);
+                return new ParserInfo(context.getPosition(), info, true);
             }
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return p.getName();
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return p.canBeEmpty();
             }
         };
     }
@@ -426,7 +685,7 @@ public class Combinators {
                     int end = context.getPosition();
                     String text = context.getText(start, end);
                     if (!predicate.test(text)) {
-                        return new ParserInfo(context.getPosition(), new String[]{errorMessage}, false);
+                        return new ParserInfo(context.getPosition(), errorMessage, false);
                     }
                     pack.drop();
                     return info1;
@@ -437,8 +696,24 @@ public class Combinators {
 
             @NotNull
             @Override
-            public String getName() {
+            public String calcName() {
                 return p.getName();
+            }
+
+            @NotNull
+            @Override
+            protected HashSet<String> calcExpectedName() {
+                return p.getExpectedName();
+            }
+
+            @Override
+            public boolean canStartWith(@NotNull IElementType type) {
+                return p.canStartWith(type);
+            }
+
+            @Override
+            public boolean calcCanBeEmpty() {
+                return p.canBeEmpty();
             }
         };
     }

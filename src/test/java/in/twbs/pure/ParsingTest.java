@@ -24,6 +24,7 @@ public class ParsingTest extends PsiTestCase {
                             testExample(file, passing);
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
                         fail("Failed to read file " + file.getAbsolutePath());
                     }
                 }
@@ -78,7 +79,9 @@ public class ParsingTest extends PsiTestCase {
         File expectedFile = new File(fileName.getAbsolutePath() + ".psi");
         if (expectedFile.isFile()) {
             String expectedTree = FileUtil.loadFile(expectedFile);
-            assertEquals(fileName.getName() + " failed.", expectedTree, psiTree);
+            //if (passing) {
+                assertEquals(fileName.getName() + " failed.", expectedTree, psiTree);
+            //}
         } else {
             assert false;  // Only manually.
             FileUtil.writeToFile(new File(fileName.getAbsolutePath() + ".psi"), psiTree);
