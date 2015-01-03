@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/ikarienator/pure-idea.svg?branch=master)](https://travis-ci.org/ikarienator/pure-idea)
-
-Pure IDEA
+Pure IDEA [![Build Status](https://travis-ci.org/ikarienator/pure-idea.svg)](https://travis-ci.org/ikarienator/pure-idea)
 =========
 An IntelliJ IDEA plugin for PureScript.
 
