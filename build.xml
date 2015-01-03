@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="pure-idea" default="all">
+  <property file="build.properties"/>
+  <condition property="jdk.home" value="${java.home}/..">
+    <not>
+      <isset property="jdk.home"/>
+    </not>
+  </condition>
+  <property name="src" location="src/main/java"/>
+  <property name="test.src" location="src/test/java"/>
+  <property name="build" location="out/production"/>
+  <property name="test.build" location="out/test"/>
+
+  <target name="init" description="Build initialization">
+    <echo message="Using IDEA home: ${idea.home}"/>
+    <echo message="Using JDK home: ${jdk.home}"/>
+  </target>
+
+  <path id="idea.classpath">
+    <fileset dir="${idea.home}/lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <path id="production.classpath">
+    <pathelement location="${build}"/>
+  </path>
+
+  <path id="classpath">
+    <path refid="production.classpath"/>
+    <path refid="idea.classpath"/>
+  </path>
+
+  <taskdef name="javac2" classname="com.intellij.ant.Javac2">
+    <classpath>
+      <pathelement location="${idea.home}/lib/javac2.jar"/>
+      <pathelement location="${idea.home}/lib/asm-all.jar"/>
+    </classpath>
+  </taskdef>
+
+  <target name="compile">
+    <echo>Compiling plugin...</echo>
+    <mkdir dir="${build}"/>
+    <javac2 source="1.6" target="1.6" srcdir="${src}" destdir="${build}" classpathref="classpath"/>
+    <copy todir="${build}">
+      <fileset dir="${basedir}">
+        <include name="META-INF/*.xml"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="compile.test">
+    <echo>Compiling tests...</echo>
+    <mkdir dir="${test.build}"/>
+    <javac2 source="1.6" target="1.6" srcdir="${test.src}" destdir="${test.build}" classpathref="classpath"/>
+  </target>
+
+
+  <target name="test" depends="compile,compile.test">
+    <echo>Testing...</echo>
+    <tempfile property="test.temp.dir" destDir="${java.io.tmpdir}" prefix="build"/>
+    <junit printsummary="yes"
+           haltonfailure="false"
+           showoutput="yes"
+           failureproperty="failureFound"
+           fork="yes"
+           forkmode="once"
+           reloading="no">
+      <jvmarg value="-Didea.home.path=${idea.home}"/>
+      <jvmarg value="-Xbootclasspath/a:${idea.home}/lib/boot.jar"/>
+      <jvmarg value="-Dfile.encoding=UTF-8"/>
+      <jvmarg value="-ea"/>
+      <jvmarg value="-Didea.plugins.path=${build}"/>
+      <jvmarg value="-Didea.launcher.bin.path=${idea.home}/bin"/>
+      <classpath>
+        <fileset dir="${java.home}/../lib" includes="**/*.jar" />
+        <path refid="classpath"/>
+        <pathelement location="${test.build}"/>
+      </classpath>
+      <formatter type="brief" usefile="false"/>
+      <batchtest>
+        <fileset dir="${test.src}">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+
+  <target name="check.test" if="failureFound" depends="test">
+    <fail message="Test failure."/>
+  </target>
+
+  <target name="package" depends="compile, check.test">
+    <jar jarfile="${basedir}/pure-idea.jar" update="true">
+      <fileset dir="${build}" includes="**/*.*" />
+    </jar>
+  </target>
+
+  <target name="clean" description="clean up">
+    <delete dir="out"/>
+  </target>
+
+  <target name="all" depends="init,clean,compile,check.test"/>
+</project>
