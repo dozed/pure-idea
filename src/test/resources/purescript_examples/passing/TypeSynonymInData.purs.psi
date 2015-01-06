@@ -52,7 +52,7 @@ FILE
                 PsiElement(identifier)('a')
           PsiElement())(')')
           PsiElement(whitespace)(' ')
-        PsiElement(operator)('|')
+        PsiElement(|)('|')
         PsiElement(whitespace)(' ')
         PsiElement(proper name)('Bar')
         PsiElement(whitespace)('\n\n')
