@@ -102,7 +102,7 @@ FILE
         PsiElement(whitespace)(' ')
         PsiElement(proper name)('Zero')
         PsiElement(whitespace)(' ')
-        PsiElement(operator)('|')
+        PsiElement(|)('|')
         PsiElement(whitespace)(' ')
         PsiElement(proper name)('Even')
         PsiElement(whitespace)(' ')

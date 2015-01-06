@@ -28,7 +28,7 @@ FILE
         PsiElement(whitespace)(' ')
         PsiElement(proper name)('X')
         PsiElement(whitespace)(' ')
-        PsiElement(operator)('|')
+        PsiElement(|)('|')
         PsiElement(whitespace)(' ')
         PsiElement(proper name)('Y')
         PsiElement(whitespace)('\n\n')

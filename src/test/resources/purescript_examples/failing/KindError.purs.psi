@@ -27,7 +27,7 @@ FILE
           PureASTWrapperElement(TypeVar)
             PsiElement(identifier)('f')
             PsiElement(whitespace)(' ')
-        PsiElement(operator)('|')
+        PsiElement(|)('|')
         PsiElement(whitespace)(' ')
         PsiElement(proper name)('Two')
         PsiElement(whitespace)(' ')

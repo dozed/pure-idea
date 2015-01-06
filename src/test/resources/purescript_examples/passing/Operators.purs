@@ -2,6 +2,9 @@ module Main where
 
   import Control.Monad.Eff
   import Debug.Trace
+  
+  (?!) :: forall a. a -> a -> a
+  (?!) x _ = x
 
   bar :: String -> String -> String
   bar = \s1 s2 -> s1 ++ s2
@@ -58,6 +61,9 @@ module Main where
   test15 :: Number -> Number -> Boolean
   test15 a b = const false $ a `test14` b
 
+  test16 :: Number -> Number -> Number 
+  test16 x y = x .|. y .&. y
+
   main = do
     let t1 = test1 1 2 (\x y -> x + y)
     let t2 = test2
@@ -74,4 +80,5 @@ module Main where
     let t13 = test13 k 1 2
     let t14 = test14 1 2
     let t15 = test15 1 2
+    let t16 = test16 1 2
     trace "Done"

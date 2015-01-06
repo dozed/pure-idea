@@ -34,7 +34,7 @@ FILE
           PureASTWrapperElement(TypeVar)
             PsiElement(identifier)('a')
             PsiElement(whitespace)(' ')
-        PsiElement(operator)('|')
+        PsiElement(|)('|')
         PsiElement(whitespace)(' ')
         PsiElement(proper name)('Right')
         PsiElement(whitespace)(' ')
