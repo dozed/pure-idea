@@ -1,17 +1,18 @@
 <idea-plugin version="2">
     <id>in.twbs.pure</id>
     <name>Purescript Plugin</name>
-    <version>1.0</version>
-    <vendor email="ikarienator@gmail.com" url="http://twbs.in">Bei Zhang</vendor>
+    <version>0.0.1</version>
+    <vendor email="ikarienator@gmail.com" url="http://github.com/ikarienator">Bei Zhang</vendor>
 
-    <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
-    ]]></description>
+    <description>Plugin for PureScript language support.</description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      <p>
+        <b>v0.0.1</b>
+        <ul>
+          <li>First publish.</li>
+        </ul>
+      </p>
     ]]>
     </change-notes>
 
