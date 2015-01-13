@@ -5,7 +5,7 @@
     <vendor email="ikarienator@gmail.com" url="http://github.com/ikarienator">Bei Zhang</vendor>
 
     <description>Plugin for PureScript language support.</description>
-
+    <idea-version since-build="139.1"/>
     <change-notes><![CDATA[
       <p>
         <b>v0.0.1</b>
