@@ -21,7 +21,7 @@ public class PureModuleType extends ModuleType<PureModuleBuilder> {
     @NotNull
     @Override
     public PureModuleBuilder createModuleBuilder() {
-        return PureModuleBuilder.INSTANCE;
+        return new PureModuleBuilder();
     }
 
     @NotNull

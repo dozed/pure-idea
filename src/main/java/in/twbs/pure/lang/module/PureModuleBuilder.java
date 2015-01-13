@@ -4,10 +4,10 @@ import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.SourcePathsBuilder;
 import com.intellij.openapi.module.ModuleType;
 
-public class PureModuleBuilder extends JavaModuleBuilder implements SourcePathsBuilder {
-    public static final PureModuleBuilder INSTANCE = new PureModuleBuilder();
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
-    private PureModuleBuilder() {
+public class PureModuleBuilder extends JavaModuleBuilder implements SourcePathsBuilder {
+    PureModuleBuilder() {
     }
 
     /**
@@ -16,5 +16,10 @@ public class PureModuleBuilder extends JavaModuleBuilder implements SourcePathsB
     @Override
     public ModuleType getModuleType() {
         return PureModuleType.getInstance();
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }
