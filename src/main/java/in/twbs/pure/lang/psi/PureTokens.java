@@ -39,6 +39,7 @@ public interface PureTokens {
 
     PureElementType DARROW = new PureElementType("=>");
     PureElementType ARROW = new PureElementType("->");
+    PureElementType LARROW = new PureElementType("<-");
     PureElementType EQ = new PureElementType("=");
     PureElementType DOT = new PureElementType(".");
     PureElementType DDOT = new PureElementType("..");  // contextual keyword

@@ -1,12 +1,13 @@
 package in.twbs.pure.lang.parser;
 
-import com.intellij.lang.PsiBuilder;
-import com.intellij.psi.tree.IElementType;
-import in.twbs.pure.lang.psi.PureTokens;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+
+import com.intellij.lang.PsiBuilder;
+import com.intellij.psi.tree.IElementType;
+
+import in.twbs.pure.lang.psi.PureTokens;
+import org.jetbrains.annotations.NotNull;
 
 public class Combinators {
     @NotNull
@@ -191,13 +192,13 @@ public class Combinators {
             @NotNull
             @Override
             protected HashSet<String> calcExpectedName() {
-                if (p1.canBeEmpty()) return strings(p1.getExpectedName(), p2.getExpectedName());
+                if (p1.canBeEmpty()) { return strings(p1.getExpectedName(), p2.getExpectedName()); }
                 return p1.getExpectedName();
             }
 
             @Override
             public boolean canStartWith(@NotNull IElementType type) {
-                if (p1.canBeEmpty()) return p1.canStartWith(type) || p2.canStartWith(type);
+                if (p1.canBeEmpty()) { return p1.canStartWith(type) || p2.canStartWith(type); }
                 return p1.canStartWith(type);
             }
 
@@ -266,18 +267,18 @@ public class Combinators {
 
             @Override
             public boolean canStartWith(@NotNull IElementType type) {
-                if (head.canStartWith(type)) return true;
+                if (head.canStartWith(type)) { return true; }
                 for (Parsec parsec : tail) {
-                    if (parsec.canStartWith(type)) return true;
+                    if (parsec.canStartWith(type)) { return true; }
                 }
                 return false;
             }
 
             @Override
             public boolean calcCanBeEmpty() {
-                if (!head.canBeEmpty()) return false;
+                if (!head.canBeEmpty()) { return false; }
                 for (Parsec parsec : tail) {
-                    if (!parsec.canBeEmpty()) return false;
+                    if (!parsec.canBeEmpty()) { return false; }
                 }
                 return true;
             }
@@ -343,12 +344,17 @@ public class Combinators {
             @NotNull
             @Override
             public ParserInfo parse(@NotNull ParserContext context) {
-                int position = context.getPosition();
-                ParserInfo info1 = p.parse(context);
-                if (info1.success) {
-                    return info1;
+                try {
+                    context.enterOptional();
+                    int position = context.getPosition();
+                    ParserInfo info1 = p.parse(context);
+                    if (info1.success) {
+                        return info1;
+                    }
+                    return new ParserInfo(info1.position, info1, context.getPosition() == position);
+                } finally {
+                    context.exitOptional();
                 }
-                return new ParserInfo(info1.position, info1, context.getPosition() == position);
             }
 
             @NotNull
@@ -385,14 +391,18 @@ public class Combinators {
                 if (!p.canBeEmpty() && !p.canStartWith(context.peek())) {
                     return new ParserInfo(context.getPosition(), p, false);
                 }
+                int start = context.getPosition();
                 PsiBuilder.Marker pack = context.start();
-                ParserInfo info1 = p.parse(context);
-                if (info1.success) {
+                boolean inAttempt = context.isInAttempt();
+                context.setInAttempt(true);
+                ParserInfo info = p.parse(context);
+                context.setInAttempt(inAttempt);
+                if (info.success) {
                     pack.drop();
-                    return info1;
+                    return info;
                 }
                 pack.rollbackTo();
-                return info1;
+                return new ParserInfo(start, info, false);
             }
 
             @NotNull
@@ -422,16 +432,19 @@ public class Combinators {
 
     @NotNull
     public static Parsec parens(@NotNull Parsec p) {
+        p = until(p, PureTokens.RPAREN);
         return lexeme(PureTokens.LPAREN).then(indented(p)).then(indented(lexeme(PureTokens.RPAREN)));
     }
 
     @NotNull
     public static Parsec squares(@NotNull Parsec p) {
+        p = until(p, PureTokens.RPAREN);
         return lexeme(PureTokens.LBRACK).then(indented(p)).then(indented(lexeme(PureTokens.RBRACK)));
     }
 
     @NotNull
     public static Parsec braces(@NotNull Parsec p) {
+        p = until(p, PureTokens.RPAREN);
         return lexeme(PureTokens.LCURLY).then(indented(p)).then(indented(lexeme(PureTokens.RCURLY)));
     }
 
@@ -546,13 +559,14 @@ public class Combinators {
     }
 
     @NotNull
-    static Parsec sepBy1(@NotNull final Parsec p, @NotNull final Parsec sep) {
-        return p.then(attempt(many(sep.then(p))));
+    static Parsec sepBy1(@NotNull Parsec p, @NotNull final IElementType sep) {
+        p = until(p, sep);
+        return p.then(attempt(many(lexeme(sep).then(p))));
     }
 
     @NotNull
     static Parsec commaSep1(@NotNull final Parsec p) {
-        return sepBy1(p, lexeme(PureTokens.COMMA));
+        return sepBy1(p, PureTokens.COMMA);
     }
 
     @NotNull
@@ -571,27 +585,34 @@ public class Combinators {
     }
 
     @NotNull
-    static Parsec until(@NotNull final Parsec p, @NotNull final IElementType type, final boolean consume) {
+    static Parsec until(@NotNull final Parsec p, @NotNull final IElementType token) {
         return new Parsec() {
             @NotNull
             @Override
             public ParserInfo parse(@NotNull ParserContext context) {
+                int startPosition = context.getPosition();
+                boolean inAttempt = context.isInAttempt();
+                context.addUntilToken(token);
+                context.setInAttempt(false);
                 ParserInfo info = p.parse(context);
+                context.setInAttempt(inAttempt);
                 if (info.success) {
                     return info;
                 }
                 PsiBuilder.Marker start = context.start();
                 while (!context.eof()) {
-                    if (context.match(type)) {
+                    if (context.isUntilToken(context.peek())) {
                         break;
                     }
                     context.advance();
                 }
-                if (consume && !context.eof()) {
-                    context.advance();
+                context.removeUntilToken(token);
+                if (!context.isInOptional() || startPosition != context.getPosition()) {
+                    start.error(info.toString());
+                } else {
+                    start.drop();
                 }
-                start.error(info.toString());
-                return new ParserInfo(context.getPosition(), info, true);
+                return new ParserInfo(info.position, info, !inAttempt);
             }
 
             @NotNull
@@ -673,7 +694,9 @@ public class Combinators {
     }
 
     @NotNull
-    static Parsec guard(@NotNull final Parsec p, final Predicate<String> predicate, @NotNull final String errorMessage) {
+    static Parsec guard(@NotNull final Parsec p,
+                        final Predicate<String> predicate,
+                        @NotNull final String errorMessage) {
         return new Parsec() {
             @NotNull
             @Override

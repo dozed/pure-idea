@@ -110,6 +110,7 @@ charControl = "^" [:uppercase:]
 
 "=>"                           { return DARROW; }
 "->"                           { return ARROW; }
+"<-"                           { return LARROW; }
 "="                            { return EQ; }
 "."                            { return DOT; }
 "\\"                           { return BACKSLASH; }

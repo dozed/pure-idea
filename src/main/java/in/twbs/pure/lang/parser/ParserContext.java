@@ -1,5 +1,7 @@
 package in.twbs.pure.lang.parser;
 
+import java.util.HashMap;
+
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.WhitespacesAndCommentsBinder;
 import com.intellij.psi.tree.IElementType;
@@ -13,6 +15,9 @@ public final class ParserContext {
     private final PsiBuilder builder;
     private int column;
     private Stack<Integer> indentationLevel = new Stack<Integer>();
+    private HashMap<IElementType, Integer> recoverySet = new HashMap<IElementType, Integer>();
+    private boolean inAttempt;
+    private int inOptional;
 
     public boolean eof() {
         return builder.eof();
@@ -120,6 +125,48 @@ public final class ParserContext {
             }
         }
         builder.advanceLexer();
+    }
+
+    public void addUntilToken(@NotNull IElementType token) {
+        int i = 0;
+        if (recoverySet.containsKey(token)) {
+            i = recoverySet.get(token);
+        }
+        recoverySet.put(token, i + 1);
+    }
+
+    public void removeUntilToken(@NotNull IElementType token) {
+        int i = recoverySet.get(token);
+        if (i == 1) {
+            recoverySet.remove(token);
+        } else {
+            recoverySet.put(token, i - 1);
+        }
+    }
+
+    public boolean isUntilToken(@NotNull IElementType token) {
+        return recoverySet.containsKey(token);
+    }
+
+    public void setInAttempt(boolean inAttempt) {
+        this.inAttempt = inAttempt;
+    }
+
+
+    public boolean isInAttempt() {
+        return this.inAttempt;
+    }
+
+    public void enterOptional() {
+        this.inOptional++;
+    }
+
+    public void exitOptional() {
+        this.inOptional--;
+    }
+
+    public boolean isInOptional() {
+        return inOptional > 0;
     }
 
     @NotNull

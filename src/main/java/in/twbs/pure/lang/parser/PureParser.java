@@ -103,7 +103,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 token(QUALIFIED),
                 token(HIDING),
                 token(AS)).as(Identifier));
-        private final Parsec operator = choice(token(OPERATOR), token(DDOT));
+        private final Parsec operator = choice(token(OPERATOR), token(DDOT), token(LARROW));
         private final Parsec properName = lexeme(PROPER_NAME);
         private final Parsec moduleName = lexeme(parseQualified(token(PROPER_NAME).as(pModuleName)));
 
@@ -237,7 +237,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 .then(indented(properName))
                 .then(many(indented(kindedIdent)).as(TypeArgs))
                 .then(optional(attempt(lexeme(EQ))
-                        .then(sepBy1(properName.then(many(indented(parseTypeAtom))), lexeme(PIPE)))))
+                        .then(sepBy1(properName.then(many(indented(parseTypeAtom))), PIPE))))
                 .as(DataDeclaration);
         private final SymbolicParsec parseTypeDeclaration
                 = attempt(parseIdent.then(indented(lexeme(DCOLON))))
@@ -344,10 +344,10 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 .as(TypeInstanceDeclaration);
 
         private final Parsec qualImport
-                = reserved("qualified")
+                = reserved(QUALIFIED)
                 .then(indented(moduleName))
                 .then(optional(indented(parens(commaSep(parseDeclarationRef)))))
-                .then(reserved("as"))
+                .then(reserved(AS))
                 .then(moduleName);
 
         private final Parsec importDeclarationType
@@ -355,7 +355,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
 
         private final Parsec stdImport
                 = moduleName
-                .then(optional(reserved("hiding")))
+                .then(optional(reserved(HIDING)))
                 .then(importDeclarationType);
 
         private final SymbolicParsec parseImportDeclaration
@@ -447,7 +447,7 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 .as(DoNotationLet);
         private final Parsec parseDoNotationBind
                 = parseBinderRef
-                .then(indented(reserved("<-")).then(parseValueRef))
+                .then(indented(reserved(LARROW)).then(parseValueRef))
                 .as(DoNotationBind);
         private final Parsec parseDoNotationElement = choice(
                 attempt(parseDoNotationBind),
