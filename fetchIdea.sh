@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IDEA_VERSION=14.0.1
+IDEA_VERSION=139.1117.1
 IDEA_TAR=ideaIC-${IDEA_VERSION}.tar.gz
 
 if [ -f ~/${IDEA_TAR} ]; then

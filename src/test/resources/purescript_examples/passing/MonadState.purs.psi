@@ -647,7 +647,7 @@ FILE
                   PureASTWrapperElement(VarBinder)
                     PsiElement(identifier)('s')
                     PsiElement(whitespace)(' ')
-              PsiElement(operator)('<-')
+              PsiElement(<-)('<-')
               PsiElement(whitespace)(' ')
               PureASTWrapperElement(Value)
                 PureASTWrapperElement(PrefixValue)

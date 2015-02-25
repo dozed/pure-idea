@@ -1,16 +1,15 @@
 package in.twbs.pure;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.util.Processor;
+
 import in.twbs.pure.lang.file.PureFile;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.io.IOException;
 
 public class ParsingTest extends PsiTestCase {
 
@@ -23,7 +22,8 @@ public class ParsingTest extends PsiTestCase {
                         if (file.getName().endsWith(".purs")) {
                             testExample(file, passing);
                         }
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         e.printStackTrace();
                         fail("Failed to read file " + file.getAbsolutePath());
                     }
@@ -80,10 +80,10 @@ public class ParsingTest extends PsiTestCase {
         if (expectedFile.isFile()) {
             String expectedTree = FileUtil.loadFile(expectedFile);
             //if (passing) {
-                assertEquals(fileName.getName() + " failed.", expectedTree, psiTree);
+            assertEquals(fileName.getName() + " failed.", expectedTree, psiTree);
             //}
         } else {
-//            assert false;  // Only manually.
+            assert false;  // Only manually.
             FileUtil.writeToFile(new File(fileName.getAbsolutePath() + ".psi"), psiTree);
         }
 

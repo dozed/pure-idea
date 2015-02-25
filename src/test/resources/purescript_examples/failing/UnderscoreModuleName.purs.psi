@@ -5,7 +5,7 @@ FILE
     PureASTWrapperElement(Qualified)
       PureASTWrapperElement(ModuleName)
         PsiElement(proper name)('Bad')
-    PsiErrorElement:Expecting proper name, ., ( or where
+    PsiErrorElement:Expecting proper name, ( or where
       PsiElement(identifier)('_Module')
       PsiElement(whitespace)(' ')
       PsiElement(where)('where')
