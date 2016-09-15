@@ -19,6 +19,7 @@ public interface PureTokens {
     PureElementType INFIX = new PureElementType("infix");
     PureElementType CLASS = new PureElementType("class");
     PureElementType INSTANCE = new PureElementType("instance");
+    PureElementType DERIVE = new PureElementType("derive");
     PureElementType MODULE = new PureElementType("module");
     PureElementType CASE = new PureElementType("case");
     PureElementType OF = new PureElementType("of");
@@ -71,8 +72,8 @@ public interface PureTokens {
     PureElementType FLOAT = new PureElementType("float");
 
     TokenSet kKeywords = TokenSet.create(DATA, NEWTYPE, TYPE, FOREIGN, IMPORT, INFIXL, INFIXR, INFIX, CLASS, INSTANCE,
-            MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE, FORALL, QUALIFIED, HIDING, AS, START,
-            BANG);
+            DERIVE, MODULE, CASE, OF, IF, THEN, ELSE, DO, LET, TRUE, FALSE, IN, WHERE, FORALL, QUALIFIED, HIDING, AS,
+            START, BANG);
     TokenSet kStrings = TokenSet.create(STRING);
     TokenSet kOperators = TokenSet.create(DARROW, ARROW, EQ, DOT, LPAREN, RPAREN, LBRACK, RBRACK, LCURLY, RCURLY);
 

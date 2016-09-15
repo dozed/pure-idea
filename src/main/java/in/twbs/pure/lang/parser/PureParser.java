@@ -343,6 +343,14 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 )))
                 .as(TypeInstanceDeclaration);
 
+        private final SymbolicParsec parseDeriveTypeInstanceDeclaration
+                = reserved(DERIVE)
+                .then(reserved(INSTANCE))
+                .then(parseIdent.then(indented(lexeme(DCOLON))))
+                .then(indented(parseQualified(properName)).as(pClassName))
+                .then(many(indented(parseTypeAtom)))
+                .as(DeriveTypeInstanceDeclaration);
+
         private final Parsec importDeclarationType
             = optional(indented(parens(commaSep(parseDeclarationRef))));
 
@@ -373,7 +381,8 @@ public class PureParser implements PsiParser, PureTokens, PureElements {
                 parseFixityDeclaration,
                 parseImportDeclaration,
                 parseTypeClassDeclaration,
-                parseTypeInstanceDeclaration
+                parseTypeInstanceDeclaration,
+                parseDeriveTypeInstanceDeclaration
         ));
 
         private final Parsec parseLocalDeclaration = positioned(choice(

@@ -33,7 +33,11 @@ public class ParsingTest extends PsiTestCase {
         };
     }
 
-    public void testExamples() {
+    //    public void testExampleDev() throws Exception {
+    //        testExample(new File("src/test/resources/purescript_examples/passing/TypeClassesDerive.purs"), true);
+    //    }
+
+    public void testExamples() throws Exception {
         String testDataPath = "src/test/resources/purescript_examples";
         FileUtil.processFilesRecursively(new File(testDataPath + "/passing"), processor(true));
         FileUtil.processFilesRecursively(new File(testDataPath + "/manual/passing"), processor(true));
